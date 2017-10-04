@@ -138,7 +138,107 @@ namespace D3FOConnectionManager
             set { this._server = value; }
         }
 
+        #region Overriden methods
+        public override object AcquireConnection(object txn)
+        {
+            // Set the connectionstring
+            UpdateConnectionString();
+            return base.AcquireConnection(txn);
+        }
 
+        public override void ReleaseConnection(object connection)
+        {
+            base.ReleaseConnection(connection);
+        }
+
+        public override DTSExecResult Validate(IDTSInfoEvents infoEvents)
+        {
+            // Very basic validation example:
+            // Check if the URL field is filled.
+            // Note: this is a runtime validation
+            // In the form you can add some more
+            // designtime validation.
+            if (string.IsNullOrEmpty(_url))
+            {
+                infoEvents.FireError(0, "My Custom Connection Manager", "URL is mandatory.", string.Empty, 0);
+                return DTSExecResult.Failure;
+            }
+            else
+            {
+                return DTSExecResult.Success;
+            }
+        }
+        #endregion
+        #region Update ConnectionString
+        private void UpdateConnectionString()
+        {
+            // Create a connectionstring, but without sensitive properties like the password
+            String connectionString = CONNECTIONSTRING_TEMPLATE;
+
+            connectionString = connectionString.Replace("<URL>", URL);
+            connectionString = connectionString.Replace("<UserName>", UserName);
+
+            _connectionString = connectionString;
+        }
+        #endregion
+
+        #region Methods for IDTSComponentPersist
+        // These two methods are for saving the data in the package XML without showing sensitive data
+        void IDTSComponentPersist.LoadFromXML(System.Xml.XmlElement node, IDTSInfoEvents infoEvents)
+        {
+            //	Checking if XML is correct. This might occur if the connection manager XML has been modified outside BIDS/SSDT
+            if (node.Name != "MYCONNECTIONMANAGER")
+            {
+                throw new Exception(string.Format("Unexpected connectionmanager element when loading task - {0}.", "MYCONNECTIONMANAGER"));
+            }
+            else
+            {
+                // Fill properties with values from package XML
+                this._userName = node.Attributes.GetNamedItem("UserName").Value;
+                this._url = node.Attributes.GetNamedItem("URL").Value;
+
+
+                foreach (XmlNode childNode in node.ChildNodes)
+                {
+                    if (childNode.Name == "Password")
+                    {
+                        this._password = childNode.InnerText;
+                    }
+                }
+                this._connectionString = node.Attributes.GetNamedItem("ConnectionString").Value;
+            }
+        }
+
+        void IDTSComponentPersist.SaveToXML(System.Xml.XmlDocument doc, IDTSInfoEvents infoEvents)
+        {
+            XmlElement rootElement = doc.CreateElement("MYCONNECTIONMANAGER");
+            doc.AppendChild(rootElement);
+
+            XmlAttribute connectionStringAttr = doc.CreateAttribute("ConnectionString");
+            connectionStringAttr.Value = _connectionString;
+            rootElement.Attributes.Append(connectionStringAttr);
+
+            XmlAttribute userNameStringAttr = doc.CreateAttribute("UserName");
+            userNameStringAttr.Value = _userName;
+            rootElement.Attributes.Append(userNameStringAttr);
+
+            XmlAttribute urlStringAttr = doc.CreateAttribute("URL");
+            urlStringAttr.Value = _url;
+            rootElement.Attributes.Append(urlStringAttr);
+
+            if (!string.IsNullOrEmpty(_password))
+            {
+                XmlElement passwordElement = doc.CreateElement("Password");
+                rootElement.AppendChild(passwordElement);
+                passwordElement.InnerText = _password;
+
+                // This will make the password property sensitive
+                XmlAttribute passwordAttr = doc.CreateAttribute("Sensitive");
+                passwordAttr.Value = "1";
+                passwordElement.Attributes.Append(passwordAttr);
+            }
+        }
+        #endregion
 
 
 
