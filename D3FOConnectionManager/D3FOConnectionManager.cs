@@ -251,56 +251,67 @@ namespace D3FOConnectionManager
         void IDTSComponentPersist.LoadFromXML(System.Xml.XmlElement node, IDTSInfoEvents infoEvents)
         {
             //	Checking if XML is correct. This might occur if the connection manager XML has been modified outside BIDS/SSDT
-            if (node.Name != "MYCONNECTIONMANAGER")
+            if (node.Name != "D3FOCONNECTIONMANAGER")
             {
-                throw new Exception(string.Format("Unexpected connectionmanager element when loading task - {0}.", "MYCONNECTIONMANAGER"));
+                throw new Exception(string.Format("Unexpected connectionmanager element when loading task - {0}.", "D3FOCONNECTIONMANAGER"));
             }
             else
             {
                 // Fill properties with values from package XML
-                this._userName = node.Attributes.GetNamedItem("UserName").Value;
-                this._url = node.Attributes.GetNamedItem("URL").Value;
+                this._name = node.Attributes.GetNamedItem("Name").Value;
+                this._aos_Uri = node.Attributes.GetNamedItem("AOS_Uri").Value;
 
 
-                foreach (XmlNode childNode in node.ChildNodes)
-                {
-                    if (childNode.Name == "Password")
-                    {
-                        this._password = childNode.InnerText;
-                    }
-                }
+                
                 this._connectionString = node.Attributes.GetNamedItem("ConnectionString").Value;
             }
         }
 
         void IDTSComponentPersist.SaveToXML(System.Xml.XmlDocument doc, IDTSInfoEvents infoEvents)
         {
-            XmlElement rootElement = doc.CreateElement("MYCONNECTIONMANAGER");
+            XmlElement rootElement = doc.CreateElement("D3FOCONNECTIONMANAGER");
             doc.AppendChild(rootElement);
 
             XmlAttribute connectionStringAttr = doc.CreateAttribute("ConnectionString");
             connectionStringAttr.Value = _connectionString;
             rootElement.Attributes.Append(connectionStringAttr);
 
-            XmlAttribute userNameStringAttr = doc.CreateAttribute("UserName");
-            userNameStringAttr.Value = _userName;
-            rootElement.Attributes.Append(userNameStringAttr);
+            XmlAttribute nameStringAttr = doc.CreateAttribute("Name");
+            nameStringAttr.Value = _name;
+            rootElement.Attributes.Append(nameStringAttr);
+            XmlAttribute assemblyStringAttr = doc.CreateAttribute("Assembly");
+            assemblyStringAttr.Value = _assembly;
+            rootElement.Attributes.Append(assemblyStringAttr);
 
-            XmlAttribute urlStringAttr = doc.CreateAttribute("URL");
-            urlStringAttr.Value = _url;
-            rootElement.Attributes.Append(urlStringAttr);
+            XmlAttribute connectionmethodStringAttr = doc.CreateAttribute("ConnectionMethod");
+            connectionmethodStringAttr.Value = _connection_Method;
+            rootElement.Attributes.Append(connectionmethodStringAttr);
 
-            if (!string.IsNullOrEmpty(_password))
-            {
-                XmlElement passwordElement = doc.CreateElement("Password");
-                rootElement.AppendChild(passwordElement);
-                passwordElement.InnerText = _password;
+            XmlAttribute companyStringAttr = doc.CreateAttribute("Company");
+            companyStringAttr.Value = _company;
+            rootElement.Attributes.Append(companyStringAttr);
 
-                // This will make the password property sensitive
-                XmlAttribute passwordAttr = doc.CreateAttribute("Sensitive");
-                passwordAttr.Value = "1";
-                passwordElement.Attributes.Append(passwordAttr);
-            }
+            XmlAttribute aosuriStringAttr = doc.CreateAttribute("AOS_Uri");
+            aosuriStringAttr.Value = _aos_Uri;
+            rootElement.Attributes.Append(aosuriStringAttr);
+
+            XmlAttribute adresourceStringAttr = doc.CreateAttribute("AD_Resource");
+            adresourceStringAttr.Value = _ad_Resource;
+            rootElement.Attributes.Append(adresourceStringAttr);
+
+            XmlAttribute adtenantStringAttr = doc.CreateAttribute("AD_Tenant");
+            adtenantStringAttr.Value = _ad_Tenant;
+            rootElement.Attributes.Append(adtenantStringAttr);
+
+            XmlAttribute adclientappidStringAttr = doc.CreateAttribute("AD_Client_App_ID");
+            adclientappidStringAttr.Value = _ad_Client_App_ID;
+            rootElement.Attributes.Append(adclientappidStringAttr);
+
+            XmlAttribute adclientappsecretStringAttr = doc.CreateAttribute("AD_Client_App_Secret");
+            adclientappsecretStringAttr.Value = _ad_Client_App_Secret;
+            rootElement.Attributes.Append(adclientappsecretStringAttr);
+
+
         }
         #endregion
 
