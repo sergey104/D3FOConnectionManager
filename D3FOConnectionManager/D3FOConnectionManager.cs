@@ -14,7 +14,7 @@ namespace D3FOConnectionManager
     {
         #region Variables for internal use
         // The template for the connectionstring, but without the sensitive password property
-        private const string CONNECTIONSTRING_TEMPLATE = "URL=<URL>;UserName=<UserName>;";
+        private const string CONNECTIONSTRING_TEMPLATE = "DATASOURCE <Name> = DOTNET CONNECTION '<Connetion_Method>' 'aosUri=<AOS_Uri>;activeDirectoryResource=<AD_Resource>;activeDirectoryTenant=<AD_Tenant>;activeDirectoryClientAppId=<AD_Client_App_ID>;activeDirectoryClientAppSecret=<AD_Client_App_Secret>'";
         #endregion
         #region Get Set Properties
         /*
@@ -239,8 +239,15 @@ namespace D3FOConnectionManager
             // Create a connectionstring, but without sensitive properties like the password
             String connectionString = CONNECTIONSTRING_TEMPLATE;
 
-            connectionString = connectionString.Replace("<URL>", URL);
-            connectionString = connectionString.Replace("<UserName>", UserName);
+            connectionString = connectionString.Replace("<Name>", Name);
+            connectionString = connectionString.Replace("<Assembly>", Assembly);
+            connectionString = connectionString.Replace("<Connection_Method>", Connection_Method);
+            connectionString = connectionString.Replace("<Company>", Company);
+            connectionString = connectionString.Replace("<AOS_Uri>", AOS_Uri);
+            connectionString = connectionString.Replace("<AD_Resource>", AD_Resource);
+            connectionString = connectionString.Replace("<AD_Tenant>", AD_Tenant);
+            connectionString = connectionString.Replace("<AD_Client_App_ID>", _ad_Client_App_ID);
+            connectionString = connectionString.Replace("<AD_Client_App_Secret>", _ad_Client_App_Secret);
 
             _connectionString = connectionString;
         }
@@ -259,7 +266,14 @@ namespace D3FOConnectionManager
             {
                 // Fill properties with values from package XML
                 this._name = node.Attributes.GetNamedItem("Name").Value;
+                this._assembly = node.Attributes.GetNamedItem("Assembly").Value;
+                this._company = node.Attributes.GetNamedItem("Company").Value;
+                this._connection_Method = node.Attributes.GetNamedItem("Connection_Method").Value;
                 this._aos_Uri = node.Attributes.GetNamedItem("AOS_Uri").Value;
+                this._ad_Resource = node.Attributes.GetNamedItem("AD_Resource").Value;
+                this._ad_Tenant = node.Attributes.GetNamedItem("AD_Tenant").Value;
+                this._ad_Client_App_ID = node.Attributes.GetNamedItem("AD_Client_App_ID").Value;
+                this._ad_Client_App_Secret = node.Attributes.GetNamedItem("AD_Client_App_Secret").Value;
 
 
                 
