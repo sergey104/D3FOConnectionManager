@@ -153,14 +153,78 @@ namespace D3FOConnectionManager
 
         public override DTSExecResult Validate(IDTSInfoEvents infoEvents)
         {
-            // Very basic validation example:
+            // Very basic validation
             // Check if the URL field is filled.
             // Note: this is a runtime validation
             // In the form you can add some more
             // designtime validation.
-            if (string.IsNullOrEmpty(_url))
+            if (string.IsNullOrEmpty(Name))
             {
-                infoEvents.FireError(0, "My Custom Connection Manager", "URL is mandatory.", string.Empty, 0);
+                infoEvents.FireError(0, "D3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
+                return DTSExecResult.Failure;
+            }
+            else
+            {
+                return DTSExecResult.Success;
+            }
+
+            if (string.IsNullOrEmpty(Assembly))
+            {
+                infoEvents.FireError(0, "D3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
+                return DTSExecResult.Failure;
+            }
+            else
+            {
+                return DTSExecResult.Success;
+            }
+            if (string.IsNullOrEmpty(Company))
+            {
+                infoEvents.FireError(0, "D3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
+                return DTSExecResult.Failure;
+            }
+            else
+            {
+                return DTSExecResult.Success;
+            }
+            if (string.IsNullOrEmpty(AOS_Uri))
+            {
+                infoEvents.FireError(0, "D3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
+                return DTSExecResult.Failure;
+            }
+            else
+            {
+                return DTSExecResult.Success;
+            }
+            if (string.IsNullOrEmpty(AD_Resource))
+            {
+                infoEvents.FireError(0, "D3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
+                return DTSExecResult.Failure;
+            }
+            else
+            {
+                return DTSExecResult.Success;
+            }
+            if (string.IsNullOrEmpty(AD_Tenant))
+            {
+                infoEvents.FireError(0, "D3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
+                return DTSExecResult.Failure;
+            }
+            else
+            {
+                return DTSExecResult.Success;
+            }
+            if (string.IsNullOrEmpty(AD_Client_App_ID))
+            {
+                infoEvents.FireError(0, "D3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
+                return DTSExecResult.Failure;
+            }
+            else
+            {
+                return DTSExecResult.Success;
+            }
+            if (string.IsNullOrEmpty(AD_Client_App_Secret))
+            {
+                infoEvents.FireError(0, "D3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
             else
