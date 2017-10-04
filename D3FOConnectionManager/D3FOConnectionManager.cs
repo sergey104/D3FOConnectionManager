@@ -10,9 +10,12 @@ namespace D3FOConnectionManager
 {
     [DtsConnection(ConnectionType = "D3FO", DisplayName = "D3FOConnection",
                   Description = "Connection Manager for D3FO")]
-    public class D3FOConnectionManager : ConnectionManagerBase
+    public class D3FOConnectionManager : ConnectionManagerBase, IDTSComponentPersist
     {
-
+        #region Variables for internal use
+        // The template for the connectionstring, but without the sensitive password property
+        private const string CONNECTIONSTRING_TEMPLATE = "URL=<URL>;UserName=<UserName>;";
+        #endregion
         #region Get Set Properties
         /*
          * The properties of connection manager that
