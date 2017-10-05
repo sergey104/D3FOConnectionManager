@@ -60,6 +60,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -81,6 +83,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="D3FOConnectionManager.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="D3FOConnectionManagerEditor.resx">
+      <DependentUpon>D3FOConnectionManagerEditor.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
