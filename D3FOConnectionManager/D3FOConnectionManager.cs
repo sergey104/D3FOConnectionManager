@@ -1,15 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
+
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Xml;
+using System.Reflection;
+
+using System.Data.Common;
+
 using Microsoft.SqlServer.Dts.Runtime;
+using System.Data;
 
 namespace D3FOConnectionManager
 {
     [DtsConnection(ConnectionType = "D3FO", DisplayName = "D3FOConnection",
-                  Description = "Connection Manager for D3FO")]
+                  Description = "D3FO Connection Manager")]
     public class D3FOConnectionManager : ConnectionManagerBase, IDTSComponentPersist
     {
         #region Variables for internal use
@@ -48,13 +52,13 @@ namespace D3FOConnectionManager
             set { this._name = value; }
         }
 
-        private string _assembly = String.Empty;
+        private string _assemblyp = String.Empty;
         [CategoryAttribute("D3FO connection manager")]
         [Description("Some Assemby")]
-        public string Assembly
+        public string Assemblyp
         {
-            get { return this._assembly; }
-            set { this._assembly = value; }
+            get { return this._assemblyp; }
+            set { this._assemblyp = value; }
         }
 
         private string _connection_Method = String.Empty;
@@ -143,14 +147,27 @@ namespace D3FOConnectionManager
         {
             // Set the connectionstring
             UpdateConnectionString();
-            return base.AcquireConnection(txn);
+            Assembly asm = Assembly.LoadFrom(@"D:\Weather\TARGIT.WeatherService\TARGIT.WeatherService.dll");
+
+            var FuncConnection = asm.DefinedTypes.First(c => c.Name == "WeatherConnection");
+
+            string errorstr = "";
+
+            //           DbConnection dbConnection = DatabaseConn.CreateDbConnection(FuncConnection.FullName, @"ignoreemptyvalues=false;datasource=C:\demodata\PopulationCBSA.xlsx;detectionrowscount=100", out errorstr);
+            //       DbConnection dbConnection = DatabaseConn.CreateDbConnection(FuncConnection.FullName, @"DATASOURCE [D365 Cloud] = DOTNET CONNECTION 'TARGIT.AX7.AX7Connection' 'aosUri=https://envdemo-10a825f4ddcbe392865aos.cloudax.dynamics.com;activeDirectoryResource=https://envdemo-10a825f4ddcbe392865aos.cloudax.dynamics.com;activeDirectoryTenant=https://login.windows.net/9d2a793f-db8c-4949-820c-34e31d66b3cd;activeDirectoryClientAppId=90ad8d0d-99c4-4b66-a349-f7017f49cab2;activeDirectoryClientAppSecret=RAYMdhcvkfMl6JGMuARB7PEgJjdMNc2u4BeC2XKr7Ac=", out errorstr);
+            DbConnection dbConnection = DatabaseConn.CreateDbConnection(FuncConnection.FullName, @"DOTNET CONNECTION 'TARGIT.WeatherService.WeatherConnection' 'url=https://www.illo.com/Weather/2.0/WeatherService.svc;IsCacheEnabled=true'", out errorstr);
+            return dbConnection;
+           // dbConnection.Open();
         }
 
         public override void ReleaseConnection(object connection)
         {
-            base.ReleaseConnection(connection);
+            if (connection != null)
+            {
+                ((IDbConnection)connection).Close();
+            }
         }
-
+#endregion
         public override DTSExecResult Validate(IDTSInfoEvents infoEvents)
         {
             // Very basic validation
@@ -163,65 +180,44 @@ namespace D3FOConnectionManager
                 infoEvents.FireError(0, "D3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
-            else
-            {
-                return DTSExecResult.Success;
-            }
+            
 
-            if (string.IsNullOrEmpty(Assembly))
+            if (string.IsNullOrEmpty(Assemblyp))
             {
                 infoEvents.FireError(0, "D3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
-            else
-            {
-                return DTSExecResult.Success;
-            }
+            
             if (string.IsNullOrEmpty(Company))
             {
                 infoEvents.FireError(0, "D3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
-            else
-            {
-                return DTSExecResult.Success;
-            }
+            
             if (string.IsNullOrEmpty(AOS_Uri))
             {
                 infoEvents.FireError(0, "D3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
-            else
-            {
-                return DTSExecResult.Success;
-            }
+            
             if (string.IsNullOrEmpty(AD_Resource))
             {
                 infoEvents.FireError(0, "D3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
-            else
-            {
-                return DTSExecResult.Success;
-            }
+            
             if (string.IsNullOrEmpty(AD_Tenant))
             {
                 infoEvents.FireError(0, "D3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
-            else
-            {
-                return DTSExecResult.Success;
-            }
+            
             if (string.IsNullOrEmpty(AD_Client_App_ID))
             {
                 infoEvents.FireError(0, "D3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
-            else
-            {
-                return DTSExecResult.Success;
-            }
+            
             if (string.IsNullOrEmpty(AD_Client_App_Secret))
             {
                 infoEvents.FireError(0, "D3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
@@ -240,7 +236,7 @@ namespace D3FOConnectionManager
             String connectionString = CONNECTIONSTRING_TEMPLATE;
 
             connectionString = connectionString.Replace("<Name>", Name);
-            connectionString = connectionString.Replace("<Assembly>", Assembly);
+            connectionString = connectionString.Replace("<Assembly>", Assemblyp);
             connectionString = connectionString.Replace("<Connection_Method>", Connection_Method);
             connectionString = connectionString.Replace("<Company>", Company);
             connectionString = connectionString.Replace("<AOS_Uri>", AOS_Uri);
@@ -266,7 +262,7 @@ namespace D3FOConnectionManager
             {
                 // Fill properties with values from package XML
                 this._name = node.Attributes.GetNamedItem("Name").Value;
-                this._assembly = node.Attributes.GetNamedItem("Assembly").Value;
+                this._assemblyp = node.Attributes.GetNamedItem("Assemblyp").Value;
                 this._company = node.Attributes.GetNamedItem("Company").Value;
                 this._connection_Method = node.Attributes.GetNamedItem("Connection_Method").Value;
                 this._aos_Uri = node.Attributes.GetNamedItem("AOS_Uri").Value;
@@ -294,7 +290,7 @@ namespace D3FOConnectionManager
             nameStringAttr.Value = _name;
             rootElement.Attributes.Append(nameStringAttr);
             XmlAttribute assemblyStringAttr = doc.CreateAttribute("Assembly");
-            assemblyStringAttr.Value = _assembly;
+            assemblyStringAttr.Value = _assemblyp;
             rootElement.Attributes.Append(assemblyStringAttr);
 
             XmlAttribute connectionmethodStringAttr = doc.CreateAttribute("ConnectionMethod");

@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="D3FOConnectionManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="D3FOConnectionManager.snk" />
@@ -59,16 +60,21 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>cd $(ProjectDir)
-@SET CONNECTIONSDIR="C:\Program Files (x86)\Microsoft SQL Server\110\DTS\Connections\"
-@SET CONNECTIONSDIR64="C:\Program Files\Microsoft SQL Server\110\DTS\Connections\"
-@SET GACUTIL="C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin\NETFX 4.0 Tools\gacutil.exe"
+@SET CONNECTIONSDIR="C:\Program Files (x86)\Microsoft SQL Server\120\DTS\Connections\"
+@SET CONNECTIONSDIR64="C:\Program Files\Microsoft SQL Server\120\DTS\Connections\"
+@SET GACUTIL="C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.7 Tools\x64\gacutil.exe"
 Echo Installing dll in GAC
 Echo $(OutDir)
 Echo $(TargetFileName)
+%25GACUTIL%25 -u "$(TargetName)"
 %25GACUTIL%25 -if "$(OutDir)$(TargetFileName)"
+
 Echo Copying files to Connections 32bit
 copy "$(OutDir)$(TargetFileName)" %25CONNECTIONSDIR%25
 Echo Copying files to Connections 64bit
-copy "$(OutDir)$(TargetFileName)" %25CONNECTIONSDIR64%25</PostBuildEvent>
+copy "$(OutDir)$(TargetFileName)" %25CONNECTIONSDIR64%25
+Echo Copying files to SQL
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files\Microsoft SQL Server\130\DTS\D3FOConnectionManager.dll "
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files (x86)\Microsoft SQL Server\130\DTS\Connections\D3FOConnectionManager.dll "</PostBuildEvent>
   </PropertyGroup>
 </Project>
