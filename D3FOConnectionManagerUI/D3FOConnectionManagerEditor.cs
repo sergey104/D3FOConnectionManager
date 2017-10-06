@@ -23,16 +23,16 @@ namespace D3FOConnectionManager
             // Setting and getting ConnectionManager
             private ConnectionManager _connectionManager;
         private TextBox txtName;
-        private CheckBox checkBox1;
-        private CheckBox checkBox2;
-        private TextBox textBox1;
-        private TextBox textBox2;
-        private TextBox textBox3;
-        private TextBox textBox4;
-        private TextBox textBox5;
-        private TextBox textBox6;
-        private TextBox textBox7;
-        private TextBox textBox8;
+        private CheckBox chLocal;
+        private CheckBox chServer;
+        private TextBox txtAssembly;
+        private TextBox txtConnectionMethod;
+        private TextBox txtCompany;
+        private TextBox txtAOS_Uri;
+        private TextBox txtAD_Resource;
+        private TextBox txtAD_Tenant;
+        private TextBox txtAD_Client_App_ID;
+        private TextBox txtAD_Client_App_Secret;
         private Label label1;
         private Label label2;
         private Label label3;
@@ -43,6 +43,9 @@ namespace D3FOConnectionManager
         private Label label8;
         private Label label9;
         private Label label10;
+        private Button btnTest;
+        private Button btnOK;
+        private Button btnCancel;
 
         public ConnectionManager ConnectionManager
             {
@@ -75,12 +78,20 @@ namespace D3FOConnectionManager
             // Fill the fields of the form. Get data from connectionManager object
             private void SMTP2Editor_Load(object sender, EventArgs e)
             {
-                this.txtName.Text = this._connectionManager.Name;
-             //   this.txtDescription.Text = this._connectionManager.Description;
-              //  this.txtURL.Text = this._connectionManager.Properties["URL"].GetValue(_connectionManager).ToString();
-              //  this.txtUserName.Text = this._connectionManager.Properties["UserName"].GetValue(_connectionManager).ToString();
-              //  this.txtPassword.Text = this._connectionManager.Properties["Password"].GetValue(_connectionManager).ToString();
-            }
+
+            
+            this.txtName.Text = this._connectionManager.Properties["Name"].GetValue(_connectionManager).ToString();
+            this.txtAssembly.Text = this._connectionManager.Properties["Assemblyp"].GetValue(_connectionManager).ToString();
+            this.txtConnectionMethod.Text = this._connectionManager.Properties["Connection_Method"].GetValue(_connectionManager).ToString();
+            this.txtCompany.Text = this._connectionManager.Properties["Company"].GetValue(_connectionManager).ToString();
+            this.txtAOS_Uri.Text = this._connectionManager.Properties["AOS_Uri"].GetValue(_connectionManager).ToString();
+            this.txtAD_Resource.Text = this._connectionManager.Properties["AD_Resource"].GetValue(_connectionManager).ToString();
+            this.txtAD_Tenant.Text = this._connectionManager.Properties["AD_Tenant"].GetValue(_connectionManager).ToString();
+            this.txtAD_Client_App_ID.Text = this._connectionManager.Properties["AD_Client_App_ID"].GetValue(_connectionManager).ToString();
+            this.txtAD_Client_App_Secret.Text = this._connectionManager.Properties["AD_Client_App_Secret"].GetValue(_connectionManager).ToString();
+            this.chLocal.v
+            
+        }
             #endregion
 
             #region Buttons
@@ -111,16 +122,16 @@ namespace D3FOConnectionManager
         private void InitializeComponent()
         {
             this.txtName = new System.Windows.Forms.TextBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.chLocal = new System.Windows.Forms.CheckBox();
+            this.chServer = new System.Windows.Forms.CheckBox();
+            this.txtAssembly = new System.Windows.Forms.TextBox();
+            this.txtConnectionMethod = new System.Windows.Forms.TextBox();
+            this.txtCompany = new System.Windows.Forms.TextBox();
+            this.txtAOS_Uri = new System.Windows.Forms.TextBox();
+            this.txtAD_Resource = new System.Windows.Forms.TextBox();
+            this.txtAD_Tenant = new System.Windows.Forms.TextBox();
+            this.txtAD_Client_App_ID = new System.Windows.Forms.TextBox();
+            this.txtAD_Client_App_Secret = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -131,6 +142,9 @@ namespace D3FOConnectionManager
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
+            this.btnTest = new System.Windows.Forms.Button();
+            this.btnOK = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtName
@@ -140,82 +154,82 @@ namespace D3FOConnectionManager
             this.txtName.Size = new System.Drawing.Size(484, 20);
             this.txtName.TabIndex = 0;
             // 
-            // checkBox1
+            // chLocal
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(171, 102);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(52, 17);
-            this.checkBox1.TabIndex = 1;
-            this.checkBox1.Text = "Local";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.chLocal.AutoSize = true;
+            this.chLocal.Location = new System.Drawing.Point(171, 102);
+            this.chLocal.Name = "chLocal";
+            this.chLocal.Size = new System.Drawing.Size(52, 17);
+            this.chLocal.TabIndex = 1;
+            this.chLocal.Text = "Local";
+            this.chLocal.UseVisualStyleBackColor = true;
+            this.chLocal.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
-            // checkBox2
+            // chServer
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(412, 102);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(57, 17);
-            this.checkBox2.TabIndex = 2;
-            this.checkBox2.Text = "Server";
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.chServer.AutoSize = true;
+            this.chServer.Location = new System.Drawing.Point(412, 102);
+            this.chServer.Name = "chServer";
+            this.chServer.Size = new System.Drawing.Size(57, 17);
+            this.chServer.TabIndex = 2;
+            this.chServer.Text = "Server";
+            this.chServer.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // txtAssembly
             // 
-            this.textBox1.Location = new System.Drawing.Point(148, 59);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(484, 20);
-            this.textBox1.TabIndex = 3;
+            this.txtAssembly.Location = new System.Drawing.Point(148, 59);
+            this.txtAssembly.Name = "txtAssembly";
+            this.txtAssembly.Size = new System.Drawing.Size(484, 20);
+            this.txtAssembly.TabIndex = 3;
             // 
-            // textBox2
+            // txtConnectionMethod
             // 
-            this.textBox2.Location = new System.Drawing.Point(148, 138);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(484, 20);
-            this.textBox2.TabIndex = 4;
+            this.txtConnectionMethod.Location = new System.Drawing.Point(148, 138);
+            this.txtConnectionMethod.Name = "txtConnectionMethod";
+            this.txtConnectionMethod.Size = new System.Drawing.Size(484, 20);
+            this.txtConnectionMethod.TabIndex = 4;
             // 
-            // textBox3
+            // txtCompany
             // 
-            this.textBox3.Location = new System.Drawing.Point(148, 164);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(484, 20);
-            this.textBox3.TabIndex = 5;
+            this.txtCompany.Location = new System.Drawing.Point(148, 164);
+            this.txtCompany.Name = "txtCompany";
+            this.txtCompany.Size = new System.Drawing.Size(484, 20);
+            this.txtCompany.TabIndex = 5;
             // 
-            // textBox4
+            // txtAOS_Uri
             // 
-            this.textBox4.Location = new System.Drawing.Point(148, 190);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(484, 20);
-            this.textBox4.TabIndex = 6;
+            this.txtAOS_Uri.Location = new System.Drawing.Point(148, 190);
+            this.txtAOS_Uri.Name = "txtAOS_Uri";
+            this.txtAOS_Uri.Size = new System.Drawing.Size(484, 20);
+            this.txtAOS_Uri.TabIndex = 6;
             // 
-            // textBox5
+            // txtAD_Resource
             // 
-            this.textBox5.Location = new System.Drawing.Point(148, 217);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(484, 20);
-            this.textBox5.TabIndex = 7;
+            this.txtAD_Resource.Location = new System.Drawing.Point(148, 217);
+            this.txtAD_Resource.Name = "txtAD_Resource";
+            this.txtAD_Resource.Size = new System.Drawing.Size(484, 20);
+            this.txtAD_Resource.TabIndex = 7;
             // 
-            // textBox6
+            // txtAD_Tenant
             // 
-            this.textBox6.Location = new System.Drawing.Point(148, 244);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(484, 20);
-            this.textBox6.TabIndex = 8;
+            this.txtAD_Tenant.Location = new System.Drawing.Point(148, 244);
+            this.txtAD_Tenant.Name = "txtAD_Tenant";
+            this.txtAD_Tenant.Size = new System.Drawing.Size(484, 20);
+            this.txtAD_Tenant.TabIndex = 8;
             // 
-            // textBox7
+            // txtAD_Client_App_ID
             // 
-            this.textBox7.Location = new System.Drawing.Point(148, 271);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(484, 20);
-            this.textBox7.TabIndex = 9;
+            this.txtAD_Client_App_ID.Location = new System.Drawing.Point(148, 271);
+            this.txtAD_Client_App_ID.Name = "txtAD_Client_App_ID";
+            this.txtAD_Client_App_ID.Size = new System.Drawing.Size(484, 20);
+            this.txtAD_Client_App_ID.TabIndex = 9;
             // 
-            // textBox8
+            // txtAD_Client_App_Secret
             // 
-            this.textBox8.Location = new System.Drawing.Point(148, 298);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(484, 20);
-            this.textBox8.TabIndex = 10;
+            this.txtAD_Client_App_Secret.Location = new System.Drawing.Point(148, 298);
+            this.txtAD_Client_App_Secret.Name = "txtAD_Client_App_Secret";
+            this.txtAD_Client_App_Secret.Size = new System.Drawing.Size(484, 20);
+            this.txtAD_Client_App_Secret.TabIndex = 10;
             // 
             // label1
             // 
@@ -308,9 +322,40 @@ namespace D3FOConnectionManager
             this.label10.TabIndex = 20;
             this.label10.Text = "AD Client App Secret";
             // 
+            // btnTest
+            // 
+            this.btnTest.Location = new System.Drawing.Point(27, 361);
+            this.btnTest.Name = "btnTest";
+            this.btnTest.Size = new System.Drawing.Size(164, 23);
+            this.btnTest.TabIndex = 21;
+            this.btnTest.Text = "Test Connection";
+            this.btnTest.UseVisualStyleBackColor = true;
+            this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
+            // 
+            // btnOK
+            // 
+            this.btnOK.Location = new System.Drawing.Point(439, 361);
+            this.btnOK.Name = "btnOK";
+            this.btnOK.Size = new System.Drawing.Size(75, 23);
+            this.btnOK.TabIndex = 22;
+            this.btnOK.Text = "OK";
+            this.btnOK.UseVisualStyleBackColor = true;
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Location = new System.Drawing.Point(557, 361);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.TabIndex = 23;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            // 
             // D3FOConnectionManagerEditor
             // 
             this.ClientSize = new System.Drawing.Size(655, 420);
+            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.btnOK);
+            this.Controls.Add(this.btnTest);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
@@ -321,16 +366,16 @@ namespace D3FOConnectionManager
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox8);
-            this.Controls.Add(this.textBox7);
-            this.Controls.Add(this.textBox6);
-            this.Controls.Add(this.textBox5);
-            this.Controls.Add(this.textBox4);
-            this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.checkBox2);
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.txtAD_Client_App_Secret);
+            this.Controls.Add(this.txtAD_Client_App_ID);
+            this.Controls.Add(this.txtAD_Tenant);
+            this.Controls.Add(this.txtAD_Resource);
+            this.Controls.Add(this.txtAOS_Uri);
+            this.Controls.Add(this.txtCompany);
+            this.Controls.Add(this.txtConnectionMethod);
+            this.Controls.Add(this.txtAssembly);
+            this.Controls.Add(this.chServer);
+            this.Controls.Add(this.chLocal);
             this.Controls.Add(this.txtName);
             this.Name = "D3FOConnectionManagerEditor";
             this.ResumeLayout(false);
@@ -344,6 +389,11 @@ namespace D3FOConnectionManager
         }
 
         private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnTest_Click(object sender, EventArgs e)
         {
 
         }
