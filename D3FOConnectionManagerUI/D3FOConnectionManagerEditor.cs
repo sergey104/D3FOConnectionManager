@@ -89,7 +89,7 @@ namespace D3FOConnectionManager
             this.txtAD_Tenant.Text = this._connectionManager.Properties["AD_Tenant"].GetValue(_connectionManager).ToString();
             this.txtAD_Client_App_ID.Text = this._connectionManager.Properties["AD_Client_App_ID"].GetValue(_connectionManager).ToString();
             this.txtAD_Client_App_Secret.Text = this._connectionManager.Properties["AD_Client_App_Secret"].GetValue(_connectionManager).ToString();
-            this.chLocal.v
+            
             
         }
             #endregion
@@ -98,13 +98,20 @@ namespace D3FOConnectionManager
             // Save value from fields in connectionManager object
             private void btnOK_Click(object sender, EventArgs e)
             {
-              //  this._connectionManager.Name = this.txtName.Text;
-              //  this._connectionManager.Description = this.txtDescription.Text;
-              //  this._connectionManager.Properties["URL"].SetValue(this._connectionManager, this.txtURL.Text);
-              //  this._connectionManager.Properties["UserName"].SetValue(this._connectionManager, this.txtUserName.Text);
-              //  this._connectionManager.Properties["Password"].SetValue(this._connectionManager, this.txtPassword.Text);
-              //  this.DialogResult = DialogResult.OK;
-            }
+            //  this._connectionManager.Name = this.txtName.Text;
+            this._connectionManager.Properties["Name"].SetValue(this._connectionManager, this.txtName.Text);
+            this._connectionManager.Properties["Assemblyp"].SetValue(this._connectionManager, this.txtAssembly.Text);
+            this._connectionManager.Properties["Connection_Method"].SetValue(this._connectionManager, this.txtConnectionMethod.Text);
+            this._connectionManager.Properties["Company"].SetValue(this._connectionManager, this.txtCompany.Text);
+            this._connectionManager.Properties["AOS_Uri"].SetValue(this._connectionManager, this.txtAOS_Uri.Text);
+            this._connectionManager.Properties["AD_Resource"].SetValue(this._connectionManager, this.txtAD_Resource.Text);
+            this._connectionManager.Properties["AD_Tenant"].SetValue(this._connectionManager, this.txtAD_Tenant.Text);
+            this._connectionManager.Properties["AD_Client_App_ID"].SetValue(this._connectionManager, this.txtAD_Client_App_ID.Text);
+            this._connectionManager.Properties["AD_Client_App_Secret"].SetValue(this._connectionManager, this.txtAD_Client_App_Secret.Text);
+            this.DialogResult = DialogResult.OK;
+            this.Close();
+
+        }
 
             // Cancel diolog
             private void btnCancel_Click(object sender, EventArgs e)
