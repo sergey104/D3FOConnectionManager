@@ -12,8 +12,8 @@ using System.Data;
 
 namespace D3FOConnectionManager
 {
-    [DtsConnection(ConnectionType = "D3FO", DisplayName = "D3FOConnection",
-                  Description = "D3FO Connection Manager",
+    [DtsConnection(ConnectionType = "TARGITD3FO", DisplayName = "TARGITD3FOConnection",
+                  Description = "TARGITD3FO Connection Manager",
         UITypeName = "D3FOConnectionManager.myConnectionManagerUI,Version=1.0.0.0,Culture=neutral,PublicKeyToken=80664248b6de6485")]
     public class D3FOConnectionManager : ConnectionManagerBase, IDTSComponentPersist
     {

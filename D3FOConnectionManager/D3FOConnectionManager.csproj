@@ -75,6 +75,16 @@ Echo Copying files to Connections 64bit
 copy "$(OutDir)$(TargetFileName)" %25CONNECTIONSDIR64%25
 Echo Copying files to SQL
 copy "$(OutDir)$(TargetFileName)" "C:\Program Files\Microsoft SQL Server\130\DTS\D3FOConnectionManager.dll "
-copy "$(OutDir)$(TargetFileName)" "C:\Program Files (x86)\Microsoft SQL Server\130\DTS\Connections\D3FOConnectionManager.dll "</PostBuildEvent>
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files (x86)\Microsoft SQL Server\130\DTS\Connections\D3FOConnectionManager.dll "
+copy "$(OutDir)$(TargetFileName)" "D:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\CommonExtensions\Microsoft\SSIS\140\Connections\"
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files (x86)\Microsoft SQL Server\110\DTS\Connections\$(TargetFileName)" /y
+ 
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\PrivateAssemblies\" /y
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files\Microsoft SQL Server\130\DTS\" /y
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files\Microsoft SQL Server\130\DTS\Connections\" /y
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files (x86)\Microsoft SQL Server\130\DTS\" /y
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files (x86)\Microsoft SQL Server\130\DTS\Connections\" /y
+copy "$(TargetDir)D3FOConnectionManager.dll" "D:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Public Assemblies\" /y
+</PostBuildEvent>
   </PropertyGroup>
 </Project>
