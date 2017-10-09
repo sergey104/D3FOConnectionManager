@@ -14,7 +14,8 @@ namespace D3FOConnectionManager
 {
     [DtsConnection(ConnectionType = "TARGITD3FO", DisplayName = "TARGITD3FOConnection",
                   Description = "TARGITD3FO Connection Manager",
-        UITypeName = "D3FOConnectionManager.myConnectionManagerUI,Version=1.0.0.0,Culture=neutral,PublicKeyToken=80664248b6de6485")]
+        UITypeName = "D3FOConnectionManager.D3FOConnectionManagerUI, D3FOConnectionManager, Version = 1.0.0.0, Culture = neutral, PublicKeyToken =71aabddac4fee55e")]
+ 
     public class D3FOConnectionManager : ConnectionManagerBase, IDTSComponentPersist
     {
         #region Variables for internal use
@@ -45,7 +46,7 @@ namespace D3FOConnectionManager
 
 
         private string _name = String.Empty;
-        [CategoryAttribute("D3FO connection manager")]
+        [CategoryAttribute("TARGITD3FO connection manager")]
         [Description("Some URL to do something with in an other task or transformation")]
         public string Name
         {
@@ -54,7 +55,7 @@ namespace D3FOConnectionManager
         }
 
         private string _assemblyp = String.Empty;
-        [CategoryAttribute("D3FO connection manager")]
+        [CategoryAttribute("TARGITD3FO connection manager")]
         [Description("Some Assemby")]
         public string Assemblyp
         {
@@ -63,7 +64,7 @@ namespace D3FOConnectionManager
         }
 
         private string _connection_Method = String.Empty;
-        [CategoryAttribute("D3FO connection manager")]
+        [CategoryAttribute("TARGITD3FO connection manager")]
         [Description("SomeConnection_Method")]
         public string Connection_Method
         {
@@ -72,7 +73,7 @@ namespace D3FOConnectionManager
         }
 
         private string _company = String.Empty;
-        [CategoryAttribute("D3FO connection manager")]
+        [CategoryAttribute("TARGITD3FO connection manager")]
         [Description("Some Company")]
         public string Company
         {
@@ -81,7 +82,7 @@ namespace D3FOConnectionManager
         }
 
         private string _aos_Uri = String.Empty;
-        [CategoryAttribute("D3FO connection manager")]
+        [CategoryAttribute("TARGITD3FO connection manager")]
         [Description("Some AOS_Uri")]
         public string AOS_Uri
         {
@@ -90,7 +91,7 @@ namespace D3FOConnectionManager
         }
 
         private string _ad_Resource = String.Empty;
-        [CategoryAttribute("D3FO connection manager")]
+        [CategoryAttribute("TARGITD3FO connection manager")]
         [Description("Some AD_Resource")]
         public string AD_Resource
         {
@@ -99,7 +100,7 @@ namespace D3FOConnectionManager
         }
 
         private string _ad_Tenant = String.Empty;
-        [CategoryAttribute("D3FO connection manager")]
+        [CategoryAttribute("TARGITD3FO connection manager")]
         [Description("Some AD_Tenant")]
         public string AD_Tenant
         {
@@ -108,7 +109,7 @@ namespace D3FOConnectionManager
         }
 
         private string _ad_Client_App_ID = String.Empty;
-        [CategoryAttribute("D3FO connection manager")]
+        [CategoryAttribute("TARGITD3FO connection manager")]
         [Description("Some AD_Client_App_ID")]
         public string AD_Client_App_ID
         {
@@ -117,7 +118,7 @@ namespace D3FOConnectionManager
         }
 
         private string _ad_Client_App_Secret = String.Empty;
-        [CategoryAttribute("D3FO connection manager")]
+        [CategoryAttribute("TARGITD3FO connection manager")]
         [Description("Some AD_Client_App_Secret")]
         public string AD_Client_App_Secret
         {
@@ -125,23 +126,16 @@ namespace D3FOConnectionManager
             set { this._ad_Client_App_Secret = value; }
         }
 
-        private bool _local = true;
-        [CategoryAttribute("D3FO connection manager")]
-        [Description("Some local")]
-        public bool Local
+        private string _assembly_location = "local";
+        [CategoryAttribute("TARGITD3FO connection manager")]
+        [Description("Some assembly location")]
+        public String Assembly_location
         {
-            get { return this._local; }
-            set { this._local = value; }
+            get { return this._assembly_location; }
+            set { this._assembly_location = value; }
         }
 
-        private bool _server = true;
-        [CategoryAttribute("D3FO connection manager")]
-        [Description("Some Server")]
-        public bool Server
-        {
-            get { return this._server; }
-            set { this._server = value; }
-        }
+        
 
         #region Overriden methods
         public override object AcquireConnection(object txn)
@@ -149,7 +143,7 @@ namespace D3FOConnectionManager
             // Set the connectionstring
             UpdateConnectionString();
             Assembly asm = Assembly.LoadFrom(@"D:\Weather\TARGIT.WeatherService\TARGIT.WeatherService.dll");
-
+           // Assembly asm = Assembly.LoadFrom(@"D:\Weather\TARGIT.WeatherService\TARGIT.WeatherService.dll");
             var FuncConnection = asm.DefinedTypes.First(c => c.Name == "WeatherConnection");
 
             string errorstr = "";
@@ -157,8 +151,9 @@ namespace D3FOConnectionManager
             //           DbConnection dbConnection = DatabaseConn.CreateDbConnection(FuncConnection.FullName, @"ignoreemptyvalues=false;datasource=C:\demodata\PopulationCBSA.xlsx;detectionrowscount=100", out errorstr);
             //       DbConnection dbConnection = DatabaseConn.CreateDbConnection(FuncConnection.FullName, @"DATASOURCE [D365 Cloud] = DOTNET CONNECTION 'TARGIT.AX7.AX7Connection' 'aosUri=https://envdemo-10a825f4ddcbe392865aos.cloudax.dynamics.com;activeDirectoryResource=https://envdemo-10a825f4ddcbe392865aos.cloudax.dynamics.com;activeDirectoryTenant=https://login.windows.net/9d2a793f-db8c-4949-820c-34e31d66b3cd;activeDirectoryClientAppId=90ad8d0d-99c4-4b66-a349-f7017f49cab2;activeDirectoryClientAppSecret=RAYMdhcvkfMl6JGMuARB7PEgJjdMNc2u4BeC2XKr7Ac=", out errorstr);
             DbConnection dbConnection = DatabaseConn.CreateDbConnection(FuncConnection.FullName, @"DOTNET CONNECTION 'TARGIT.WeatherService.WeatherConnection' 'url=https://www.illo.com/Weather/2.0/WeatherService.svc;IsCacheEnabled=true'", out errorstr);
-            return dbConnection;
-           // dbConnection.Open();
+                return dbConnection;
+            // dbConnection.Open();
+           
         }
 
         public override void ReleaseConnection(object connection)
@@ -178,50 +173,50 @@ namespace D3FOConnectionManager
             // designtime validation.
             if (string.IsNullOrEmpty(Name))
             {
-                infoEvents.FireError(0, "D3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
+                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
             
 
             if (string.IsNullOrEmpty(Assemblyp))
             {
-                infoEvents.FireError(0, "D3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
+                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
             
             if (string.IsNullOrEmpty(Company))
             {
-                infoEvents.FireError(0, "D3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
+                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
             
             if (string.IsNullOrEmpty(AOS_Uri))
             {
-                infoEvents.FireError(0, "D3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
+                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
             
             if (string.IsNullOrEmpty(AD_Resource))
             {
-                infoEvents.FireError(0, "D3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
+                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
             
             if (string.IsNullOrEmpty(AD_Tenant))
             {
-                infoEvents.FireError(0, "D3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
+                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
             
             if (string.IsNullOrEmpty(AD_Client_App_ID))
             {
-                infoEvents.FireError(0, "D3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
+                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
             
             if (string.IsNullOrEmpty(AD_Client_App_Secret))
             {
-                infoEvents.FireError(0, "D3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
+                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
             else
@@ -255,7 +250,7 @@ namespace D3FOConnectionManager
         void IDTSComponentPersist.LoadFromXML(System.Xml.XmlElement node, IDTSInfoEvents infoEvents)
         {
             //	Checking if XML is correct. This might occur if the connection manager XML has been modified outside BIDS/SSDT
-            if (node.Name != "D3FOCONNECTIONMANAGER")
+            if (node.Name != "TARGITD3FOCONNECTIONMANAGER")
             {
                 throw new Exception(string.Format("Unexpected connectionmanager element when loading task - {0}.", "D3FOCONNECTIONMANAGER"));
             }
@@ -271,16 +266,16 @@ namespace D3FOConnectionManager
                 this._ad_Tenant = node.Attributes.GetNamedItem("AD_Tenant").Value;
                 this._ad_Client_App_ID = node.Attributes.GetNamedItem("AD_Client_App_ID").Value;
                 this._ad_Client_App_Secret = node.Attributes.GetNamedItem("AD_Client_App_Secret").Value;
+                this._assembly_location = node.Attributes.GetNamedItem("Assembly_location").Value;
 
 
-                
-                this._connectionString = node.Attributes.GetNamedItem("ConnectionString").Value;
-            }
+               // this._connectionString = node.Attributes.GetNamedItem("ConnectionString").Value;
+            } 
         }
 
         void IDTSComponentPersist.SaveToXML(System.Xml.XmlDocument doc, IDTSInfoEvents infoEvents)
         {
-            XmlElement rootElement = doc.CreateElement("D3FOCONNECTIONMANAGER");
+            XmlElement rootElement = doc.CreateElement("TARGITD3FOCONNECTIONMANAGER");
             doc.AppendChild(rootElement);
 
             XmlAttribute connectionStringAttr = doc.CreateAttribute("ConnectionString");
@@ -321,6 +316,10 @@ namespace D3FOConnectionManager
             XmlAttribute adclientappsecretStringAttr = doc.CreateAttribute("AD_Client_App_Secret");
             adclientappsecretStringAttr.Value = _ad_Client_App_Secret;
             rootElement.Attributes.Append(adclientappsecretStringAttr);
+
+            XmlAttribute assemblylocationStringAttr = doc.CreateAttribute("Assembly_location");
+            assemblylocationStringAttr.Value = _assembly_location;
+            rootElement.Attributes.Append(assemblylocationStringAttr);
 
 
         }

@@ -1,0 +1,1 @@
+TARGITD3FO.D3FOConnectionManager.D3FOConnectionManagerUI, TARGITD3FO.D3FOConnectionManager, Version=1.0.0.0, Culture=neutral, PublicKeyToken=71aabddac4fee55e

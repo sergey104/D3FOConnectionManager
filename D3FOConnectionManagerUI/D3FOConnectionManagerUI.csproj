@@ -7,7 +7,7 @@
     <ProjectGuid>{D9E9F29A-532F-4186-805D-F87B6E7DFA98}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>D3FOConnectionManagerUI</RootNamespace>
+    <RootNamespace>D3FOConnectionManager</RootNamespace>
     <AssemblyName>D3FOConnectionManagerUI</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -90,4 +90,33 @@
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>cd $(ProjectDir)
+@SET CONNECTIONSDIR="C:\Program Files (x86)\Microsoft SQL Server\120\DTS\Connections\"
+@SET CONNECTIONSDIR64="C:\Program Files\Microsoft SQL Server\120\DTS\Connections\"
+@SET GACUTIL="C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.7 Tools\x64\gacutil.exe"
+Echo Installing dll in GAC
+Echo $(OutDir)
+Echo $(TargetFileName)
+%25GACUTIL%25 -u "$(TargetName)"
+%25GACUTIL%25 -if "$(OutDir)$(TargetFileName)"
+
+Echo Copying files to Connections 32bit
+copy "$(OutDir)$(TargetFileName)" %25CONNECTIONSDIR%25
+Echo Copying files to Connections 64bit
+copy "$(OutDir)$(TargetFileName)" %25CONNECTIONSDIR64%25
+Echo Copying files to SQL
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files\Microsoft SQL Server\130\DTS\D3FOConnectionManager.dll "
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files (x86)\Microsoft SQL Server\130\DTS\Connections\D3FOConnectionManager.dll "
+copy "$(OutDir)$(TargetFileName)" "D:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\CommonExtensions\Microsoft\SSIS\140\Connections\"
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files (x86)\Microsoft SQL Server\110\DTS\Connections\$(TargetFileName)" /y
+ 
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\PrivateAssemblies\" /y
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files\Microsoft SQL Server\130\DTS\" /y
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files\Microsoft SQL Server\130\DTS\Connections\" /y
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files (x86)\Microsoft SQL Server\130\DTS\" /y
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files (x86)\Microsoft SQL Server\130\DTS\Connections\" /y
+copy "$(TargetDir)D3FOConnectionManagerUI.dll" "D:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Public Assemblies\" /y
+</PostBuildEvent>
+  </PropertyGroup>
 </Project>

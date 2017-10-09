@@ -21,10 +21,8 @@ namespace D3FOConnectionManager
         {
             #region General Connection Manager Methods
             // Setting and getting ConnectionManager
-            private ConnectionManager _connectionManager;
+        private ConnectionManager _connectionManager;
         private TextBox txtName;
-        private CheckBox chLocal;
-        private CheckBox chServer;
         private TextBox txtAssembly;
         private TextBox txtConnectionMethod;
         private TextBox txtCompany;
@@ -46,6 +44,9 @@ namespace D3FOConnectionManager
         private Button btnTest;
         private Button btnOK;
         private Button btnCancel;
+        private RadioButton radioLocal;
+        private RadioButton radioServer;
+        private GroupBox groupBox1;
 
         public ConnectionManager ConnectionManager
             {
@@ -89,8 +90,10 @@ namespace D3FOConnectionManager
             this.txtAD_Tenant.Text = this._connectionManager.Properties["AD_Tenant"].GetValue(_connectionManager).ToString();
             this.txtAD_Client_App_ID.Text = this._connectionManager.Properties["AD_Client_App_ID"].GetValue(_connectionManager).ToString();
             this.txtAD_Client_App_Secret.Text = this._connectionManager.Properties["AD_Client_App_Secret"].GetValue(_connectionManager).ToString();
-            
-            
+            if (this._connectionManager.Properties["Assembly_location"].GetValue(_connectionManager).ToString() == "Server") this.radioServer.Checked = true;
+               else this.radioServer.Checked = false;
+
+
         }
             #endregion
 
@@ -108,6 +111,8 @@ namespace D3FOConnectionManager
             this._connectionManager.Properties["AD_Tenant"].SetValue(this._connectionManager, this.txtAD_Tenant.Text);
             this._connectionManager.Properties["AD_Client_App_ID"].SetValue(this._connectionManager, this.txtAD_Client_App_ID.Text);
             this._connectionManager.Properties["AD_Client_App_Secret"].SetValue(this._connectionManager, this.txtAD_Client_App_Secret.Text);
+            if(this.radioServer.Checked == true) this._connectionManager.Properties["Assembly_location"].SetValue(this._connectionManager, "Server");
+            else this._connectionManager.Properties["Assembly_location"].SetValue(this._connectionManager, "Local");
             this.DialogResult = DialogResult.OK;
             this.Close();
 
@@ -129,8 +134,6 @@ namespace D3FOConnectionManager
         private void InitializeComponent()
         {
             this.txtName = new System.Windows.Forms.TextBox();
-            this.chLocal = new System.Windows.Forms.CheckBox();
-            this.chServer = new System.Windows.Forms.CheckBox();
             this.txtAssembly = new System.Windows.Forms.TextBox();
             this.txtConnectionMethod = new System.Windows.Forms.TextBox();
             this.txtCompany = new System.Windows.Forms.TextBox();
@@ -152,6 +155,10 @@ namespace D3FOConnectionManager
             this.btnTest = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.radioLocal = new System.Windows.Forms.RadioButton();
+            this.radioServer = new System.Windows.Forms.RadioButton();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtName
@@ -160,27 +167,6 @@ namespace D3FOConnectionManager
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(484, 20);
             this.txtName.TabIndex = 0;
-            // 
-            // chLocal
-            // 
-            this.chLocal.AutoSize = true;
-            this.chLocal.Location = new System.Drawing.Point(171, 102);
-            this.chLocal.Name = "chLocal";
-            this.chLocal.Size = new System.Drawing.Size(52, 17);
-            this.chLocal.TabIndex = 1;
-            this.chLocal.Text = "Local";
-            this.chLocal.UseVisualStyleBackColor = true;
-            this.chLocal.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
-            // 
-            // chServer
-            // 
-            this.chServer.AutoSize = true;
-            this.chServer.Location = new System.Drawing.Point(412, 102);
-            this.chServer.Name = "chServer";
-            this.chServer.Size = new System.Drawing.Size(57, 17);
-            this.chServer.TabIndex = 2;
-            this.chServer.Text = "Server";
-            this.chServer.UseVisualStyleBackColor = true;
             // 
             // txtAssembly
             // 
@@ -357,9 +343,43 @@ namespace D3FOConnectionManager
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
+            // radioLocal
+            // 
+            this.radioLocal.AutoSize = true;
+            this.radioLocal.Location = new System.Drawing.Point(6, 10);
+            this.radioLocal.Name = "radioLocal";
+            this.radioLocal.Size = new System.Drawing.Size(51, 17);
+            this.radioLocal.TabIndex = 24;
+            this.radioLocal.TabStop = true;
+            this.radioLocal.Text = "Local";
+            this.radioLocal.UseVisualStyleBackColor = true;
+            this.radioLocal.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // radioServer
+            // 
+            this.radioServer.AutoSize = true;
+            this.radioServer.Location = new System.Drawing.Point(89, 10);
+            this.radioServer.Name = "radioServer";
+            this.radioServer.Size = new System.Drawing.Size(56, 17);
+            this.radioServer.TabIndex = 25;
+            this.radioServer.TabStop = true;
+            this.radioServer.Text = "Server";
+            this.radioServer.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.radioServer);
+            this.groupBox1.Controls.Add(this.radioLocal);
+            this.groupBox1.Location = new System.Drawing.Point(148, 85);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(393, 33);
+            this.groupBox1.TabIndex = 26;
+            this.groupBox1.TabStop = false;
+            // 
             // D3FOConnectionManagerEditor
             // 
             this.ClientSize = new System.Drawing.Size(655, 420);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnTest);
@@ -381,10 +401,10 @@ namespace D3FOConnectionManager
             this.Controls.Add(this.txtCompany);
             this.Controls.Add(this.txtConnectionMethod);
             this.Controls.Add(this.txtAssembly);
-            this.Controls.Add(this.chServer);
-            this.Controls.Add(this.chLocal);
             this.Controls.Add(this.txtName);
             this.Name = "D3FOConnectionManagerEditor";
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -401,6 +421,11 @@ namespace D3FOConnectionManager
         }
 
         private void btnTest_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
 
         }
