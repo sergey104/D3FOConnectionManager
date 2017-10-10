@@ -11,12 +11,12 @@ using Microsoft.SqlServer.Dts.Runtime.Design;
 
 namespace D3FOConnectionManager
 {
-    public class D3FOConnectionManagerUI : IDtsConnectionManagerUI
+    public class D3FOConnectionManagerInterface : IDtsConnectionManagerUI
     {
         private ConnectionManager _connectionManager;
         private IServiceProvider _serviceProvider;
 
-        public D3FOConnectionManagerUI()
+        public D3FOConnectionManagerInterface()
         {
 
         }

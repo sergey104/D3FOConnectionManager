@@ -75,7 +75,7 @@
     <Compile Include="D3FOConnectionManagerEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="D3FOConnectionManagerUI.cs" />
+    <Compile Include="D3FOConnectionManagerInterface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

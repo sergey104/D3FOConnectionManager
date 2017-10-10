@@ -72,6 +72,7 @@ namespace D3FOConnectionManager
             {
                 this._connectionManager = connectionManager;
                 this._serviceProvider = serviceProvider;
+            
             }
             #endregion
 
@@ -405,6 +406,11 @@ namespace D3FOConnectionManager
             this.Name = "D3FOConnectionManagerEditor";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+            this.Text = "D3FOConnectionManager Editor";
+            this.Load += new EventHandler(this.SMTP2Editor_Load);
+           
             this.ResumeLayout(false);
             this.PerformLayout();
 

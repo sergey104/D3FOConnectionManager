@@ -1,1 +1,23 @@
 TARGITD3FO.D3FOConnectionManager.D3FOConnectionManagerUI, TARGITD3FO.D3FOConnectionManager, Version=1.0.0.0, Culture=neutral, PublicKeyToken=71aabddac4fee55e
+
+ UITypeName = "SSISJoost.myConnectionManagerInterface,SSISJoost.myConnectionManagerUI,Version=1.0.0.0,Culture=neutral,PublicKeyToken=80664248b6de6485")
+    ]
+	
+	
+	TITLE: Microsoft Visual Studio
+------------------------------
+
+The new connection manager could not be created.
+
+------------------------------
+ADDITIONAL INFORMATION:
+
+The connection manager user interface specified by type name 'D3FOConnectionManager.D3FOConnectionManagerUI, D3FOConnectionManager.D3FOConnectionManager, Version = 1.0.0.0, Culture = neutral, PublicKeyToken = 71aabddac4fee55e' could not be loaded. (Microsoft.DataTransformationServices.Design)
+
+For help, click: http://go.microsoft.com/fwlink?ProdName=Microsoft%C2%AE%20Visual%20Studio%C2%AE&ProdVer=15.0.26730.16&EvtSrc=Microsoft.DataTransformationServices.Design.SR&EvtID=CouldNotLoadConnectionUIForType&LinkId=20476
+
+------------------------------
+BUTTONS:
+
+OK
+------------------------------
