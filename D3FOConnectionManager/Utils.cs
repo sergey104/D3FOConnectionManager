@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace D3FOConnectionManager
+namespace TARGITD3FOConnection
 {
 
     static class Util

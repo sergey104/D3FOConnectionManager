@@ -9,7 +9,7 @@ using Microsoft.SqlServer.Dts.Runtime;
 using Microsoft.SqlServer.Dts.Runtime.Design;
 
 
-namespace D3FOConnectionManager
+namespace TARGITD3FOConnection
 {
     public class D3FOConnectionManagerInterface : IDtsConnectionManagerUI
     {

@@ -13,7 +13,7 @@ using Microsoft.SqlServer.Dts.Design;
 using Microsoft.SqlServer.Dts.Runtime;
 using Microsoft.SqlServer.Dts.Runtime.Design;
 
-namespace D3FOConnectionManager
+namespace TARGITD3FOConnection
 {
     
 
@@ -123,7 +123,8 @@ namespace D3FOConnectionManager
             private void btnCancel_Click(object sender, EventArgs e)
             {
                 this.DialogResult = DialogResult.Cancel;
-            }
+            this.Close();
+        }
 
             // Show some helpful information
             private void btnHelp_Click(object sender, EventArgs e)

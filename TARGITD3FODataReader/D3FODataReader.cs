@@ -14,14 +14,18 @@ using Microsoft.SqlServer.Dts.Design;
 using Microsoft.SqlServer.Dts.Runtime;
 using Microsoft.SqlServer.Dts.Runtime.Design;
 using Microsoft.SqlServer.Dts.Runtime.Wrapper;
+using TARGITD3FOConnection;
 
-namespace D3FOConnectionManager
+namespace TARGITD3FOConnection
 {
     [DtsPipelineComponent(DisplayName = "TARGITD3FO Source DataReader",
      ComponentType = ComponentType.SourceAdapter,
      Description = "Connection source for TARGITD3FO")]
     public class D3FODataReader : PipelineComponent
     {
+       
+       
+
         public override void ProvideComponentProperties()
         {
             // Reset the component.
@@ -66,16 +70,16 @@ namespace D3FOConnectionManager
         {
             if (ComponentMetaData.RuntimeConnectionCollection[0].ConnectionManager != null)
             {
-             /*   ConnectionManager connectionManager = Microsoft.SqlServer.Dts.Runtime.DtsConvert.GetWrapper(
+                ConnectionManager connectionManager = Microsoft.SqlServer.Dts.Runtime.DtsConvert.GetWrapper(
                   ComponentMetaData.RuntimeConnectionCollection[0].ConnectionManager);
 
-                this.rabbitMqConnectionManager = connectionManager.InnerObject as RabbitMQConnectionManager.RabbitMQConnectionManager;
+             /*     this.ConnectionManager = connectionManager.InnerObject as RabbitMQConnectionManager.RabbitMQConnectionManager;
 
-                if (this.rabbitMqConnectionManager == null)
-                    throw new Exception("Couldn't get the RabbitMQ connection manager, ");
+                   if (this.rabbitMqConnectionManager == null)
+                       throw new Exception("Couldn't get the RabbitMQ connection manager, ");
 
-                this.queueName = ComponentMetaData.CustomPropertyCollection["QueueName"].Value;
-                rabbitConnection = this.rabbitMqConnectionManager.AcquireConnection(transaction) as IConnection; */
+                   this.queueName = ComponentMetaData.CustomPropertyCollection["QueueName"].Value;
+                   rabbitConnection = this.rabbitMqConnectionManager.AcquireConnection(transaction) as IConnection; */
             }
         }
 
