@@ -123,7 +123,7 @@ namespace TARGITD3FOConnection
             private void btnCancel_Click(object sender, EventArgs e)
             {
                 this.DialogResult = DialogResult.Cancel;
-            this.Close();
+                this.Close();
         }
 
             // Show some helpful information
@@ -344,6 +344,7 @@ namespace TARGITD3FOConnection
             this.btnCancel.TabIndex = 23;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // radioLocal
             // 
@@ -405,13 +406,10 @@ namespace TARGITD3FOConnection
             this.Controls.Add(this.txtAssembly);
             this.Controls.Add(this.txtName);
             this.Name = "D3FOConnectionManagerEditor";
+            this.Text = "D3FOConnectionManager Editor";
+            this.Load += new System.EventHandler(this.SMTP2Editor_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-            this.Text = "D3FOConnectionManager Editor";
-            this.Load += new EventHandler(this.SMTP2Editor_Load);
-           
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -436,5 +434,7 @@ namespace TARGITD3FOConnection
         {
 
         }
+
+        
     }
     }
