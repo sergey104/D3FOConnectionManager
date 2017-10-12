@@ -59,8 +59,11 @@
       <HintPath>..\D3FOConnectionManagerUI\Assemblies\Microsoft.SqlServer.PipelineHost.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Channels" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -73,6 +76,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="D3FOConnectionManager.snk" />
   </ItemGroup>
   <ItemGroup>
@@ -100,6 +104,8 @@ copy "$(OutDir)$(TargetFileName)" "C:\Program Files (x86)\Microsoft SQL Server\1
 copy "$(OutDir)$(TargetFileName)" "C:\Program Files (x86)\Microsoft SQL Server\120\DTS\PipelineComponents\" /y
 copy "$(OutDir)$(TargetFileName)" "C:\Program Files (x86)\Microsoft SQL Server\130\DTS\PipelineComponents\" /y
 copy "$(OutDir)$(TargetFileName)" "C:\Program Files\Microsoft SQL Server\120\DTS\PipelineComponents\" /y
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files\Microsoft SQL Server\130\DTS\PipelineComponents\" /y
+copy "$(OutDir)$(TargetFileName)" "D:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\CommonExtensions\Microsoft\SSIS\140\PipeLineComponents\"
 copy "$(TargetDir)TARGITD3FODataReader.dll" "D:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Public Assemblies\" /y
 </PostBuildEvent>
   </PropertyGroup>

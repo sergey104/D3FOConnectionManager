@@ -335,6 +335,7 @@ namespace TARGITD3FOConnection
             this.btnOK.TabIndex = 22;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
+            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
             // btnCancel
             // 
