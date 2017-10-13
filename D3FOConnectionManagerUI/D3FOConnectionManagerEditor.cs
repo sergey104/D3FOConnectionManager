@@ -428,8 +428,13 @@ namespace TARGITD3FOConnection
 
         private void btnTest_Click(object sender, EventArgs e)
         {
+            object t = this.ConnectionManager.AcquireConnection(sender);
+            if (t == null) MessageBox.Show("Cannot connect");
+            else MessageBox.Show("All OK");
+            
 
         }
+   
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {

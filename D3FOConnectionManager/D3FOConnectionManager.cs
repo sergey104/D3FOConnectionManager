@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Windows;
 using System.ComponentModel;
 using System.Linq;
 using System.Xml;
@@ -42,12 +42,13 @@ namespace TARGITD3FOConnection
             //{
             //    _connectionString = value;
             //}
+            
         }
-
+        
 
         private string _name = String.Empty;
         [CategoryAttribute("TARGITD3FO connection manager")]
-        [Description("Some URL to do something with in an other task or transformation")]
+        [Description("Name to do something with in an other task or transformation")]
         public string Name
         {
             get { return this._name; }
@@ -155,7 +156,7 @@ namespace TARGITD3FOConnection
             // dbConnection.Open();
            
         }
-
+       
         public override void ReleaseConnection(object connection)
         {
             if (connection != null)
@@ -252,13 +253,13 @@ namespace TARGITD3FOConnection
             //	Checking if XML is correct. This might occur if the connection manager XML has been modified outside BIDS/SSDT
             if (node.Name != "TARGITD3FOCONNECTIONMANAGER")
             {
-                throw new Exception(string.Format("Unexpected connectionmanager element when loading task - {0}.", "D3FOCONNECTIONMANAGER"));
+                throw new Exception(string.Format("Unexpected connectionmanager element when loading task - {0}.", "TARGITD3FOCONNECTIONMANAGER"));
             }
             else
             {
                 // Fill properties with values from package XML
                 this._name = node.Attributes.GetNamedItem("Name").Value;
-                this._assemblyp = node.Attributes.GetNamedItem("Assemblyp").Value;
+                this._assemblyp = node.Attributes.GetNamedItem("Assembly").Value;
                 this._company = node.Attributes.GetNamedItem("Company").Value;
                 this._connection_Method = node.Attributes.GetNamedItem("Connection_Method").Value;
                 this._aos_Uri = node.Attributes.GetNamedItem("AOS_Uri").Value;
@@ -278,9 +279,9 @@ namespace TARGITD3FOConnection
             XmlElement rootElement = doc.CreateElement("TARGITD3FOCONNECTIONMANAGER");
             doc.AppendChild(rootElement);
 
-            XmlAttribute connectionStringAttr = doc.CreateAttribute("ConnectionString");
-            connectionStringAttr.Value = _connectionString;
-            rootElement.Attributes.Append(connectionStringAttr);
+         //   XmlAttribute connectionStringAttr = doc.CreateAttribute("ConnectionString");
+         //   connectionStringAttr.Value = _connectionString;
+         //   rootElement.Attributes.Append(connectionStringAttr);
 
             XmlAttribute nameStringAttr = doc.CreateAttribute("Name");
             nameStringAttr.Value = _name;
@@ -289,7 +290,7 @@ namespace TARGITD3FOConnection
             assemblyStringAttr.Value = _assemblyp;
             rootElement.Attributes.Append(assemblyStringAttr);
 
-            XmlAttribute connectionmethodStringAttr = doc.CreateAttribute("ConnectionMethod");
+            XmlAttribute connectionmethodStringAttr = doc.CreateAttribute("Connection_Method");
             connectionmethodStringAttr.Value = _connection_Method;
             rootElement.Attributes.Append(connectionmethodStringAttr);
 
