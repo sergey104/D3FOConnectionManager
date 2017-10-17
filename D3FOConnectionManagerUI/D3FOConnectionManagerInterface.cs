@@ -40,11 +40,7 @@ namespace TARGITD3FOConnection
         {
         }
 
-        public void New(IWin32Window parentWindow)
-       {
-
-        }
-
+       
         public bool Edit(System.Windows.Forms.IWin32Window parentWindow, Microsoft.SqlServer.Dts.Runtime.Connections connections, Microsoft.SqlServer.Dts.Runtime.Design.ConnectionManagerUIArgs connectionUIArg)
         {
             D3FOConnectionManagerEditor editor = new D3FOConnectionManagerEditor();

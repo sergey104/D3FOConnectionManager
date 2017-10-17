@@ -11,7 +11,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Microsoft.SqlServer.Dts.Design;
 using Microsoft.SqlServer.Dts.Runtime;
-using Microsoft.SqlServer.Dts.Runtime.Design;
+
 
 namespace TARGITD3FOConnection
 {
@@ -21,7 +21,7 @@ namespace TARGITD3FOConnection
         {
             #region General Connection Manager Methods
             // Setting and getting ConnectionManager
-        private ConnectionManager _connectionManager;
+        
         private TextBox txtName;
         private TextBox txtAssembly;
         private TextBox txtConnectionMethod;
@@ -48,6 +48,7 @@ namespace TARGITD3FOConnection
         private RadioButton radioServer;
         private GroupBox groupBox1;
 
+        private ConnectionManager _connectionManager;
         public ConnectionManager ConnectionManager
             {
                 get { return _connectionManager; }
@@ -82,7 +83,7 @@ namespace TARGITD3FOConnection
             {
 
             
-            this.txtName.Text = this._connectionManager.Properties["Name"].GetValue(_connectionManager).ToString();
+            this.txtName.Text = this._connectionManager.Properties["ManagerName"].GetValue(_connectionManager).ToString();
             this.txtAssembly.Text = this._connectionManager.Properties["Assemblyp"].GetValue(_connectionManager).ToString();
             this.txtConnectionMethod.Text = this._connectionManager.Properties["Connection_Method"].GetValue(_connectionManager).ToString();
             this.txtCompany.Text = this._connectionManager.Properties["Company"].GetValue(_connectionManager).ToString();
@@ -91,8 +92,14 @@ namespace TARGITD3FOConnection
             this.txtAD_Tenant.Text = this._connectionManager.Properties["AD_Tenant"].GetValue(_connectionManager).ToString();
             this.txtAD_Client_App_ID.Text = this._connectionManager.Properties["AD_Client_App_ID"].GetValue(_connectionManager).ToString();
             this.txtAD_Client_App_Secret.Text = this._connectionManager.Properties["AD_Client_App_Secret"].GetValue(_connectionManager).ToString();
-            if (this._connectionManager.Properties["Assembly_location"].GetValue(_connectionManager).ToString() == "Server") this.radioServer.Checked = true;
-               else this.radioServer.Checked = false;
+            if (this._connectionManager.Properties["Assembly_location"].GetValue(_connectionManager).ToString() == "Server")
+            { this.radioServer.Checked = true;
+                this.radioLocal.Checked = false;
+            }
+            else {
+                this.radioServer.Checked = false;
+                this.radioLocal.Checked = true;
+            }
 
 
         }
@@ -102,8 +109,8 @@ namespace TARGITD3FOConnection
             // Save value from fields in connectionManager object
             private void btnOK_Click(object sender, EventArgs e)
             {
-            //  this._connectionManager.Name = this.txtName.Text;
-            this._connectionManager.Properties["Name"].SetValue(this._connectionManager, this.txtName.Text);
+            this._connectionManager.Name = this.txtName.Text;
+            this._connectionManager.Properties["ManagerName"].SetValue(this._connectionManager, this.txtName.Text);
             this._connectionManager.Properties["Assemblyp"].SetValue(this._connectionManager, this.txtAssembly.Text);
             this._connectionManager.Properties["Connection_Method"].SetValue(this._connectionManager, this.txtConnectionMethod.Text);
             this._connectionManager.Properties["Company"].SetValue(this._connectionManager, this.txtCompany.Text);
@@ -428,10 +435,21 @@ namespace TARGITD3FOConnection
 
         private void btnTest_Click(object sender, EventArgs e)
         {
+            string z = this.ConnectionManager.ConnectionString;
             object t = this.ConnectionManager.AcquireConnection(sender);
-            if (t == null) MessageBox.Show("Cannot connect");
-            else MessageBox.Show("All OK");
-            
+            try
+            {
+                ((IDbConnection)t).Open(); ;
+                MessageBox.Show("All OK!  " + z);
+               
+            }
+            catch(Exception er)
+            {
+                MessageBox.Show("Cannot connect" +"  "+ er.ToString());
+                return;
+            }
+
+             ((IDbConnection)t).Close();
 
         }
    

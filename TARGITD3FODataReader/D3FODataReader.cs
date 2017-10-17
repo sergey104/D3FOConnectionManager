@@ -6,11 +6,11 @@ using Microsoft.SqlServer.Dts.Pipeline;
 using Microsoft.SqlServer.Dts.Pipeline.Wrapper;
 using Microsoft.SqlServer.Dts.Runtime;
 using Microsoft.SqlServer.Dts.Runtime.Wrapper;
-using System.ServiceModel;
 using System.Data;
-using System.Xml;
+using System.Windows.Forms;
 using System.IO;
 using System.Data.SqlClient;
+using System.Data.Common;
 
 namespace TARGITD3FOConnection
 {
@@ -18,54 +18,64 @@ namespace TARGITD3FOConnection
     public class TARGITD3FODataReaderComponent : PipelineComponent
     {
         private SqlDataReader sqlReader;
-       
+        public D3FOConnectionManager cm;
+        public IDTSCustomProperty100 queueName;
+        public IDTSRuntimeConnection100 connection;
+        public IDTSOutput100 output;
+
         public override void ProvideComponentProperties()
         {
+            base.RemoveAllInputsOutputsAndCustomProperties();
             ComponentMetaData.RuntimeConnectionCollection.RemoveAll();
-            RemoveAllInputsOutputsAndCustomProperties();
-            ComponentMetaData.Name = "TARGITD3FODataReaderComponent";
-            ComponentMetaData.Description = "TARGITD3FODataReaderComponent";
-            IDTSRuntimeConnection100 rtc = ComponentMetaData.RuntimeConnectionCollection.New();
-            rtc.Name = "TARGITD3FOConnection";
-            rtc.Description = "TARGITD3FOConnection";
-            IDTSOutput100 output = ComponentMetaData.OutputCollection.New();
-            output.Name = "Component Output";
-            output.Description = "Output";
-            output.ExternalMetadataColumnCollection.IsUsed = true;
-            IDTSCustomProperty100 queueName = ComponentMetaData.CustomPropertyCollection.New();
+
+            output = ComponentMetaData.OutputCollection.New();
+            output.Name = "DataOutput";
+
+            queueName = ComponentMetaData.CustomPropertyCollection.New();
             queueName.Name = "QueueName";
-            queueName.Description = "The name of the D3FO  queue to read from";
+            queueName.Description = "The name of the queue to read messages from";
+
+
+
+            connection = ComponentMetaData.RuntimeConnectionCollection.New();
+            connection.Name = "sdatasource";
+            connection.ConnectionManagerID = "sdatasource";
+
+            
+
+
             CreateColumns();
         }
         public override void AcquireConnections(object transaction)
         {
-
             if (ComponentMetaData.RuntimeConnectionCollection[0].ConnectionManager != null)
             {
-                String _filename;
-                    ConnectionManager cm = Microsoft.SqlServer.Dts.Runtime.DtsConvert.GetWrapper(ComponentMetaData.RuntimeConnectionCollection["TARGITD3FOConnection"].ConnectionManager);
+                ConnectionManager connectionManager = Microsoft.SqlServer.Dts.Runtime.DtsConvert.GetWrapper(
+                  ComponentMetaData.RuntimeConnectionCollection[0].ConnectionManager);
 
-                   D3FOConnectionManager connectionManager = cm.InnerObject as D3FOConnectionManager;
+                this.cm = connectionManager.InnerObject as D3FOConnectionManager;
 
+                if (this.cm == null)
+                    throw new Exception("Couldn't get the cm connection manager, ");
 
-                    if (connectionManager == null)   throw new Exception("Couldn't get D3FO connection manager, ");
-
-                    IDTSCustomProperty100 queueName = ComponentMetaData.CustomPropertyCollection["QueueName"];
-                    //  _filename = ComponentMetaData.RuntimeConnectionCollection["FilePipeline"].ConnectionManager.AcquireConnection(transaction).ToString();
-                    _filename = connectionManager.AcquireConnection(transaction).ToString();
-                    if (_filename == null || _filename.Length == 0)
-                    {
-                        throw new Exception("Nothing returned when openning connection");
-                    }  
+          //      this.queueName = ComponentMetaData.CustomPropertyCollection["QueueName"].Value;
+                object rabbitConnection = this.cm.AcquireConnection(transaction) as DbConnection;
             }
 
-
-
         }
-            // [CLSCompliant(false)]
-               public override DTSValidationStatus Validate()
+
+        public override void ReleaseConnections()
+        {
+            if (connection.ConnectionManager != null)
+            {
+                //this.connection.ConnectionManager.ReleaseConnection(connection);
+                base.ReleaseConnections();
+            }
+        }
+        // [CLSCompliant(false)]
+        public override DTSValidationStatus Validate()
                 {
-         /*   bool cancel;
+        /*   bool cancel;
             string qName = ComponentMetaData.CustomPropertyCollection["QueueName"].Value.ToString();
 
             if (string.IsNullOrWhiteSpace(qName))
@@ -73,8 +83,8 @@ namespace TARGITD3FOConnection
                 //Validate that the QueueName property is set
                 ComponentMetaData.FireError(0, ComponentMetaData.Name, "The QueueName property must be set", "", 0, out cancel);
                 return DTSValidationStatus.VS_ISBROKEN;
-            } */
-
+            } 
+            */
             return base.Validate();
         }
 
@@ -82,8 +92,8 @@ namespace TARGITD3FOConnection
         {
             try
             {
-                SqlConnection sqlConn = (SqlConnection)Microsoft.SqlServer.Dts.Runtime.DtsConvert.GetWrapper(ComponentMetaData.RuntimeConnectionCollection["TARGITD3FOConnection"].ConnectionManager).AcquireConnection(null);
-
+                SqlConnection sqlConn = (SqlConnection)Microsoft.SqlServer.Dts.Runtime.DtsConvert.GetWrapper(ComponentMetaData.RuntimeConnectionCollection[0].ConnectionManager).AcquireConnection(null);
+               
                 SqlCommand cmd = new SqlCommand("SELECT * FROM system.tables", sqlConn);
                 sqlReader = cmd.ExecuteReader();
             }
@@ -96,20 +106,47 @@ namespace TARGITD3FOConnection
 
         private void CreateColumns()
         {
-            IDTSOutput100 output = ComponentMetaData.OutputCollection["Component Output"];
+             
 
-            output.OutputColumnCollection.RemoveAll();
-            output.ExternalMetadataColumnCollection.RemoveAll();
+             output.OutputColumnCollection.RemoveAll();
+             output.ExternalMetadataColumnCollection.RemoveAll();
 
-            IDTSOutputColumn100 column1 = output.OutputColumnCollection.New();
-            IDTSExternalMetadataColumn100 exColumn1 = output.ExternalMetadataColumnCollection.New();
+             IDTSOutputColumn100 column1 = output.OutputColumnCollection.New();
+             IDTSExternalMetadataColumn100 exColumn1 = output.ExternalMetadataColumnCollection.New();
+             IDTSOutputColumn100 column2 = output.OutputColumnCollection.New();
+             IDTSExternalMetadataColumn100 exColumn2 = output.ExternalMetadataColumnCollection.New();
 
-            
 
-            column1.Name = "Table";
-            column1.SetDataTypeProperties(DataType.DT_WSTR, 4000, 0, 0, 0);
 
-            
+             column1.Name = "Country";
+             column1.SetDataTypeProperties(DataType.DT_WSTR, 4000, 0, 0, 0);
+             exColumn1.Name = "Country";
+
+            column2.Name = "Code";
+            column2.SetDataTypeProperties(DataType.DT_WSTR, 4000, 0, 0, 0);
+            exColumn2.Name = "Code";
+
+        }
+
+        public override void SetOutputColumnDataTypeProperties(int outputID, int outputColumnID, Microsoft.SqlServer.Dts.Runtime.Wrapper.DataType dataType, int length, int precision, int scale, int codePage)
+
+        {
+
+            IDTSOutputCollection100 outputColl = this.ComponentMetaData.OutputCollection;
+
+            IDTSOutput100 output = outputColl.GetObjectByID(outputID);
+
+            IDTSOutputColumnCollection100 columnColl = output.OutputColumnCollection;
+
+            IDTSOutputColumn100 column = columnColl.GetObjectByID(outputColumnID);
+
+            column.SetDataTypeProperties(dataType, length, precision, scale, codePage);
+
+        }
+
+        public override void PrimeOutput(int outputs, int[] outputIDs, PipelineBuffer[] buffers)
+        {
+            base.PrimeOutput(outputs, outputIDs, buffers);
         }
 
     }

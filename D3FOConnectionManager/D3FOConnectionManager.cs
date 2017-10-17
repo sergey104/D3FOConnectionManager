@@ -20,7 +20,7 @@ namespace TARGITD3FOConnection
     {
         #region Variables for internal use
         // The template for the connectionstring, but without the sensitive password property
-        private const string CONNECTIONSTRING_TEMPLATE = "DATASOURCE <Name> = DOTNET CONNECTION '<Connetion_Method>' 'aosUri=<AOS_Uri>;activeDirectoryResource=<AD_Resource>;activeDirectoryTenant=<AD_Tenant>;activeDirectoryClientAppId=<AD_Client_App_ID>;activeDirectoryClientAppSecret=<AD_Client_App_Secret>'";
+        private const string CONNECTIONSTRING_TEMPLATE = "DATASOURCE <Name> = DOTNET CONNECTION '<Connection_Method>' 'aosUri=<AOS_Uri>;activeDirectoryResource=<AD_Resource>;activeDirectoryTenant=<AD_Tenant>;activeDirectoryClientAppId=<AD_Client_App_ID>;activeDirectoryClientAppSecret=<AD_Client_App_Secret>'";
         #endregion
         #region Get Set Properties
         /*
@@ -29,6 +29,14 @@ namespace TARGITD3FOConnection
          * You can add a Category and Description
          * for each property making it clearer.
          */
+         public D3FOConnectionManager()
+        {
+            ManagerName = "sdatasource";
+            Assemblyp = "AX7";
+            
+
+
+        }
         private string _connectionString = String.Empty;
         public override string ConnectionString
         {
@@ -44,15 +52,15 @@ namespace TARGITD3FOConnection
             //}
             
         }
-        
 
-        private string _name = String.Empty;
+
+        private string _manager_name = "TARGITD3FOConnection"; // String.Empty;
         [CategoryAttribute("TARGITD3FO connection manager")]
-        [Description("Name to do something with in an other task or transformation")]
-        public string Name
+        [Description("Manager Name to do something with in an other task or transformation")]
+        public string ManagerName
         {
-            get { return this._name; }
-            set { this._name = value; }
+            get { return this._manager_name; }
+            set { this._manager_name = value; }
         }
 
         private string _assemblyp = String.Empty;
@@ -66,7 +74,7 @@ namespace TARGITD3FOConnection
 
         private string _connection_Method = String.Empty;
         [CategoryAttribute("TARGITD3FO connection manager")]
-        [Description("SomeConnection_Method")]
+        [Description("Some Connection_Method")]
         public string Connection_Method
         {
             get { return this._connection_Method; }
@@ -151,8 +159,10 @@ namespace TARGITD3FOConnection
 
             //           DbConnection dbConnection = DatabaseConn.CreateDbConnection(FuncConnection.FullName, @"ignoreemptyvalues=false;datasource=C:\demodata\PopulationCBSA.xlsx;detectionrowscount=100", out errorstr);
             //       DbConnection dbConnection = DatabaseConn.CreateDbConnection(FuncConnection.FullName, @"DATASOURCE [D365 Cloud] = DOTNET CONNECTION 'TARGIT.AX7.AX7Connection' 'aosUri=https://envdemo-10a825f4ddcbe392865aos.cloudax.dynamics.com;activeDirectoryResource=https://envdemo-10a825f4ddcbe392865aos.cloudax.dynamics.com;activeDirectoryTenant=https://login.windows.net/9d2a793f-db8c-4949-820c-34e31d66b3cd;activeDirectoryClientAppId=90ad8d0d-99c4-4b66-a349-f7017f49cab2;activeDirectoryClientAppSecret=RAYMdhcvkfMl6JGMuARB7PEgJjdMNc2u4BeC2XKr7Ac=", out errorstr);
-            DbConnection dbConnection = DatabaseConn.CreateDbConnection(FuncConnection.FullName, @"DOTNET CONNECTION 'TARGIT.WeatherService.WeatherConnection' 'url=https://www.illo.com/Weather/2.0/WeatherService.svc;IsCacheEnabled=true'", out errorstr);
-                return dbConnection;
+            //    DbConnection dbConnection = DatabaseConn.CreateDbConnection(FuncConnection.FullName, @"DOTNET CONNECTION 'TARGIT.WeatherService.WeatherConnection' 'url=https://www.illo.com/Weather/2.0/WeatherService.svc;IsCacheEnabled=true'", out errorstr);
+            DbConnection dbConnection = DatabaseConn.CreateDbConnection(FuncConnection.FullName, _connectionString, out errorstr);
+         //   dbConnection.Open();
+            return dbConnection;
             // dbConnection.Open();
            
         }
@@ -172,58 +182,58 @@ namespace TARGITD3FOConnection
             // Note: this is a runtime validation
             // In the form you can add some more
             // designtime validation.
-            if (string.IsNullOrEmpty(Name))
+            _manager_name = "TARGITD3FOConnection";
+            if (string.IsNullOrEmpty(_manager_name))
             {
-                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
+                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "Connection Manager Name Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
             
-
+    
             if (string.IsNullOrEmpty(Assemblyp))
             {
-                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
+                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "Assemblyp Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
             
             if (string.IsNullOrEmpty(Company))
             {
-                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
+                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "Сщьзфтн Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
             
             if (string.IsNullOrEmpty(AOS_Uri))
             {
-                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
+                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "AOS_Uri Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
             
             if (string.IsNullOrEmpty(AD_Resource))
             {
-                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
+                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "AD_Resource Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
             
             if (string.IsNullOrEmpty(AD_Tenant))
             {
-                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
+                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "AD_Tenant Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
             
             if (string.IsNullOrEmpty(AD_Client_App_ID))
             {
-                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
+                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "AD_Client_App_ID Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
             
             if (string.IsNullOrEmpty(AD_Client_App_Secret))
             {
-                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "Field is mandatory.", string.Empty, 0);
+                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "AD_Client_App_Secret Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
-            else
-            {
+            
                 return DTSExecResult.Success;
-            }
+            
         }
         #endregion
         #region Update ConnectionString
@@ -232,7 +242,7 @@ namespace TARGITD3FOConnection
             // Create a connectionstring, but without sensitive properties like the password
             String connectionString = CONNECTIONSTRING_TEMPLATE;
 
-            connectionString = connectionString.Replace("<Name>", Name);
+            connectionString = connectionString.Replace("<Name>", ManagerName);
             connectionString = connectionString.Replace("<Assembly>", Assemblyp);
             connectionString = connectionString.Replace("<Connection_Method>", Connection_Method);
             connectionString = connectionString.Replace("<Company>", Company);
@@ -258,7 +268,7 @@ namespace TARGITD3FOConnection
             else
             {
                 // Fill properties with values from package XML
-                this._name = node.Attributes.GetNamedItem("Name").Value;
+                this._manager_name = node.Attributes.GetNamedItem("Name").Value;
                 this._assemblyp = node.Attributes.GetNamedItem("Assembly").Value;
                 this._company = node.Attributes.GetNamedItem("Company").Value;
                 this._connection_Method = node.Attributes.GetNamedItem("Connection_Method").Value;
@@ -284,7 +294,7 @@ namespace TARGITD3FOConnection
          //   rootElement.Attributes.Append(connectionStringAttr);
 
             XmlAttribute nameStringAttr = doc.CreateAttribute("Name");
-            nameStringAttr.Value = _name;
+            nameStringAttr.Value = _manager_name;
             rootElement.Attributes.Append(nameStringAttr);
             XmlAttribute assemblyStringAttr = doc.CreateAttribute("Assembly");
             assemblyStringAttr.Value = _assemblyp;
