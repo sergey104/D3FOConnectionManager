@@ -14,7 +14,10 @@ using System.Data.Common;
 
 namespace TARGITD3FOConnection
 {
-    [DtsPipelineComponent(DisplayName = "TARGITD3FOComponent", ComponentType = ComponentType.SourceAdapter, IconResource = "TARGITD3FODataReader.Resources.Icon1.ico")]
+    [DtsPipelineComponent(DisplayName = "TARGITD3FOComponent", ComponentType = ComponentType.SourceAdapter, IconResource = "TARGITD3FODataReader.Resources.Icon1.ico",
+      UITypeName = "TARGITD3FOConnection.TARGITD3FODataReaderComponentInterface, TARGITD3FODataReaderComponentUI, Version = 1.0.0.0, Culture = neutral, PublicKeyToken =71aabddac4fee55e"
+        )]
+
     public class TARGITD3FODataReaderComponent : PipelineComponent
     {
         private SqlDataReader sqlReader;
