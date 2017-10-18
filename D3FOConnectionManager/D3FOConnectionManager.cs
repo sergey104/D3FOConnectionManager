@@ -29,9 +29,10 @@ namespace TARGITD3FOConnection
          * You can add a Category and Description
          * for each property making it clearer.
          */
+        private DbConnection db;
          public D3FOConnectionManager()
         {
-            ManagerName = "sdatasource";
+          //  ManagerName = "sdatasource";
             Assemblyp = "AX7";
             
 
@@ -161,12 +162,16 @@ namespace TARGITD3FOConnection
             //       DbConnection dbConnection = DatabaseConn.CreateDbConnection(FuncConnection.FullName, @"DATASOURCE [D365 Cloud] = DOTNET CONNECTION 'TARGIT.AX7.AX7Connection' 'aosUri=https://envdemo-10a825f4ddcbe392865aos.cloudax.dynamics.com;activeDirectoryResource=https://envdemo-10a825f4ddcbe392865aos.cloudax.dynamics.com;activeDirectoryTenant=https://login.windows.net/9d2a793f-db8c-4949-820c-34e31d66b3cd;activeDirectoryClientAppId=90ad8d0d-99c4-4b66-a349-f7017f49cab2;activeDirectoryClientAppSecret=RAYMdhcvkfMl6JGMuARB7PEgJjdMNc2u4BeC2XKr7Ac=", out errorstr);
             //    DbConnection dbConnection = DatabaseConn.CreateDbConnection(FuncConnection.FullName, @"DOTNET CONNECTION 'TARGIT.WeatherService.WeatherConnection' 'url=https://www.illo.com/Weather/2.0/WeatherService.svc;IsCacheEnabled=true'", out errorstr);
             DbConnection dbConnection = DatabaseConn.CreateDbConnection(FuncConnection.FullName, _connectionString, out errorstr);
-         //   dbConnection.Open();
+            //   dbConnection.Open();
+            db = dbConnection;
             return dbConnection;
             // dbConnection.Open();
            
         }
-       
+       public DbConnection GetDbConnection()
+        {
+            return db;
+        }
         public override void ReleaseConnection(object connection)
         {
             if (connection != null)

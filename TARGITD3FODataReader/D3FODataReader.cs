@@ -20,11 +20,19 @@ namespace TARGITD3FOConnection
 
     public class TARGITD3FODataReaderComponent : PipelineComponent
     {
-        private SqlDataReader sqlReader;
+        private DbDataReader sqlReader;
         public D3FOConnectionManager cm;
         public IDTSCustomProperty100 queueName;
         public IDTSRuntimeConnection100 connection;
         public IDTSOutput100 output;
+        public DbConnection sqlConn;
+
+        public TARGITD3FODataReaderComponent()
+        {
+            cm = new D3FOConnectionManager();
+            cm.AcquireConnection(null);
+            sqlConn = cm.GetDbConnection();
+        }
 
         public override void ProvideComponentProperties()
         {
@@ -38,7 +46,7 @@ namespace TARGITD3FOConnection
             queueName.Name = "QueueName";
             queueName.Description = "The name of the queue to read messages from";
 
-
+            
 
             connection = ComponentMetaData.RuntimeConnectionCollection.New();
             connection.Name = "sdatasource";
@@ -55,25 +63,25 @@ namespace TARGITD3FOConnection
             {
                 ConnectionManager connectionManager = Microsoft.SqlServer.Dts.Runtime.DtsConvert.GetWrapper(
                   ComponentMetaData.RuntimeConnectionCollection[0].ConnectionManager);
-
+                
                 this.cm = connectionManager.InnerObject as D3FOConnectionManager;
-
+               
                 if (this.cm == null)
                     throw new Exception("Couldn't get the cm connection manager, ");
 
           //      this.queueName = ComponentMetaData.CustomPropertyCollection["QueueName"].Value;
-                object rabbitConnection = this.cm.AcquireConnection(transaction) as DbConnection;
+                connection = this.cm.AcquireConnection(transaction) as IDTSRuntimeConnection100;
             }
 
         }
 
         public override void ReleaseConnections()
         {
-            if (connection.ConnectionManager != null)
-            {
+          //  if (connection.ConnectionManager != null)
+         //   {
                 //this.connection.ConnectionManager.ReleaseConnection(connection);
                 base.ReleaseConnections();
-            }
+         //   }
         }
         // [CLSCompliant(false)]
         public override DTSValidationStatus Validate()
@@ -93,18 +101,31 @@ namespace TARGITD3FOConnection
 
         public override void PreExecute()
         {
-            try
-            {
-                SqlConnection sqlConn = (SqlConnection)Microsoft.SqlServer.Dts.Runtime.DtsConvert.GetWrapper(ComponentMetaData.RuntimeConnectionCollection[0].ConnectionManager).AcquireConnection(null);
-               
-                SqlCommand cmd = new SqlCommand("SELECT * FROM system.tables", sqlConn);
+            
+               try
+                {
+                MessageBox.Show("DBBBBBBB111111111111111111!");
+
+
+
+                //  DbConnection sqlConn = (DbConnection)connection;
+                sqlConn.Open();
+                DbCommand cmd = sqlConn.CreateCommand();
+                MessageBox.Show("DBBBBBBB!");
+                cmd.CommandText = "SELECT * FROM CountryCodes";
+                cmd.CommandType = System.Data.CommandType.Text;
+                MessageBox.Show("DBBBBBBB2222!");
                 sqlReader = cmd.ExecuteReader();
             }
-            catch (Exception)
-            {
-                ReleaseConnections();
-                throw;
-            }
+                catch (Exception)
+                {
+                    ReleaseConnections();
+                    throw;
+                } 
+            
+
+            
+            base.PreExecute();
         }
 
         private void CreateColumns()
@@ -149,7 +170,24 @@ namespace TARGITD3FOConnection
 
         public override void PrimeOutput(int outputs, int[] outputIDs, PipelineBuffer[] buffers)
         {
-            base.PrimeOutput(outputs, outputIDs, buffers);
+            PipelineBuffer buffer = buffers[0];
+            try
+            {
+
+                string sep = "";
+
+                while (sqlReader.Read())
+                {
+
+                    string s = (String.Format("{0}",sqlReader[0]));
+                    MessageBox.Show(s);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred:\n{ex.Message}\n{ex.StackTrace}");
+            }
+            buffer.SetEndOfRowset();
         }
 
     }
