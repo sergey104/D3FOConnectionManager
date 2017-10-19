@@ -179,8 +179,12 @@ namespace TARGITD3FOConnection
                 while (sqlReader.Read())
                 {
 
-                    string s = (String.Format("{0}",sqlReader[0]));
-                    MessageBox.Show(s);
+                       string s0 = (String.Format("{0}",sqlReader[0]));
+                    string s1 = (String.Format("{0}", sqlReader[1]));
+                    //    MessageBox.Show(s);
+                    buffer.AddRow();
+                    buffer[0] = s0;
+                    buffer[1] = s1;
                 }
             }
             catch (Exception ex)
@@ -188,6 +192,12 @@ namespace TARGITD3FOConnection
                 MessageBox.Show("An error occurred:\n{ex.Message}\n{ex.StackTrace}");
             }
             buffer.SetEndOfRowset();
+        }
+
+        public override void Cleanup()
+        {
+            
+            base.Cleanup();
         }
 
     }

@@ -85,6 +85,12 @@
       <DependentUpon>TARGITD3FODataReaderComponentEditor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\D3FOConnectionManager\TARGITD3FOConnectionManager.csproj">
+      <Project>{7f791bac-9a89-498b-9d0e-ffa02e8cbbec}</Project>
+      <Name>TARGITD3FOConnectionManager</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>cd $(ProjectDir)
