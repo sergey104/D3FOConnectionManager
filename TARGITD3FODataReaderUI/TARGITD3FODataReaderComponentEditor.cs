@@ -13,324 +13,391 @@ namespace TARGITD3FOConnection
 {
     public partial class TARGITD3FODataReaderComponentEditor: Form
     {
-        private Microsoft.SqlServer.Dts.Pipeline.Wrapper.IDTSComponentMetaData100 metaData;
-        private IServiceProvider serviceProvider;
-        private IDtsConnectionService connectionService;
-        
-       
-        private GroupBox groupBox1;
-      
+        private ListBox listBox1;
+        private TabControl tabControl1;
+        private TabPage tabConnectionManagerPage;
+        private Button button1;
+        private ComboBox comboConnection;
+        private Label label2;
         private Label label1;
-        private CManagedComponentWrapper designTimeInstance;
+        private TabPage tabColumnsPage;
+        private ComboBox comboMode;
+        private Label label3;
+        private TabControl tabAccessMode;
+        private TabPage tabTables;
+        private Label label4;
+        private TabPage tabSQL;
+        private ComboBox comboBox1;
+        private Button buttonPreview;
+        private RichTextBox richTextBox1;
+        private Label label5;
+        private Button button5;
+        private Button button4;
+        private Button button3;
+        private Button button2;
+        private Panel panel2;
+        private Panel panel1;
+        private Panel panel3;
+        private Button buttonOK;
+        private Button buttonCancel;
+        private Button buttonHelp;
+        private TabPage tabErrorOutputPage;
 
-        private class ConnectionManagerItem
-        {
-            public string ID;
-            public string Name { get; set; }
-            public TARGITD3FOConnection.D3FOConnectionManager ConnManager { get; set; }
-
-            public override string ToString()
-            {
-                return Name;
-            }
-        }
-
-        public TARGITD3FODataReaderComponentEditor()
-        {
-            InitializeComponent();
-        }
-
-        public TARGITD3FODataReaderComponentEditor(Microsoft.SqlServer.Dts.Pipeline.Wrapper.IDTSComponentMetaData100 metaData, IServiceProvider serviceProvider)
-      : this()
-    {
-            this.metaData = metaData;
-            this.serviceProvider = serviceProvider;
-            this.connectionService = (IDtsConnectionService)serviceProvider.GetService(typeof(IDtsConnectionService));
-            this.designTimeInstance = metaData.Instantiate();
-        }
-
-        private void RabbitMQSourceUIForm_Load(object sender, EventArgs e)
-        {
-            var connections = connectionService.GetConnections();
-
-            var queueName = metaData.CustomPropertyCollection[0];
-            txtQueueName.Text = queueName.Value;
-
-            string connectionManagerId = string.Empty;
-
-            var currentConnectionManager = this.metaData.RuntimeConnectionCollection[0];
-            if (currentConnectionManager != null)
-            {
-                connectionManagerId = currentConnectionManager.ConnectionManagerID;
-            }
-
-            for (int i = 0; i < connections.Count; i++)
-            {
-                var conn = connections[i].InnerObject as TARGITD3FOConnection.D3FOConnectionManager;
-
-                if (conn != null)
-                {
-                    var item = new ConnectionManagerItem()
-                    {
-                        Name = connections[i].Name,
-                        ConnManager = conn,
-                        ID = connections[i].ID
-                    };
-                    cbConnectionList.Items.Add(item);
-
-                    if (connections[i].ID.Equals(connectionManagerId))
-                    {
-                        cbConnectionList.SelectedIndex = i;
-                    }
-                }
-            }
-        }
-
-        private void btnOK_Click(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrWhiteSpace(txtQueueName.Text))
-            {
-                designTimeInstance.SetComponentProperty("QueueName", txtQueueName.Text);
-            }
-
-            if (cbConnectionList.SelectedItem != null)
-            {
-                var item = (ConnectionManagerItem)cbConnectionList.SelectedItem;
-                this.metaData.RuntimeConnectionCollection[0].ConnectionManagerID = item.ID;
-            }
-
-            this.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.Close();
-        }
-
-        private void btnNewConnectionManager_Click(object sender, EventArgs e)
-        {
-            System.Collections.ArrayList created = connectionService.CreateConnection("TARGITConnection");
-
-            foreach (ConnectionManager cm in created)
-            {
-                var item = new ConnectionManagerItem()
-                {
-                    Name = cm.Name,
-                    ConnManager = cm.InnerObject as TARGITD3FOConnection.D3FOConnectionManager,
-                    ID = cm.ID
-                };
-
-                cbConnectionList.Items.Insert(0, item);
-            }
-        }
-
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
-
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-        #region
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TARGITD3FODataReaderComponentEditor));
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.btnOK = new System.Windows.Forms.Button();
+            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabConnectionManagerPage = new System.Windows.Forms.TabPage();
+            this.buttonPreview = new System.Windows.Forms.Button();
+            this.tabAccessMode = new System.Windows.Forms.TabControl();
+            this.tabTables = new System.Windows.Forms.TabPage();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.tabSQL = new System.Windows.Forms.TabPage();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.comboMode = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.comboConnection = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tabColumnsPage = new System.Windows.Forms.TabPage();
+            this.tabErrorOutputPage = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.cbConnectionList = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.btnNewConnectionManager = new System.Windows.Forms.Button();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.txtQueueName = new System.Windows.Forms.TextBox();
-            this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
-            this.panel3.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            this.panel4.SuspendLayout();
-            this.groupBox2.SuspendLayout();
+            this.buttonOK = new System.Windows.Forms.Button();
+            this.buttonCancel = new System.Windows.Forms.Button();
+            this.buttonHelp = new System.Windows.Forms.Button();
+            this.tabControl1.SuspendLayout();
+            this.tabConnectionManagerPage.SuspendLayout();
+            this.tabAccessMode.SuspendLayout();
+            this.tabTables.SuspendLayout();
+            this.tabSQL.SuspendLayout();
+            this.tabColumnsPage.SuspendLayout();
+            this.tabErrorOutputPage.SuspendLayout();
             this.SuspendLayout();
             // 
-            // btnCancel
+            // listBox1
             // 
-            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(86, 7);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 3;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
+            this.listBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.ItemHeight = 15;
+            this.listBox1.Items.AddRange(new object[] {
+            "Connection Manager",
+            "Columns",
+            "Error Output"});
+            this.listBox1.Location = new System.Drawing.Point(23, 25);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(150, 454);
+            this.listBox1.TabIndex = 0;
             // 
-            // btnOK
+            // tabControl1
             // 
-            this.btnOK.Location = new System.Drawing.Point(5, 7);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 4;
-            this.btnOK.Text = "OK";
-            this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+            this.tabControl1.Controls.Add(this.tabConnectionManagerPage);
+            this.tabControl1.Controls.Add(this.tabColumnsPage);
+            this.tabControl1.Controls.Add(this.tabErrorOutputPage);
+            this.tabControl1.Location = new System.Drawing.Point(208, 12);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(658, 467);
+            this.tabControl1.TabIndex = 1;
             // 
-            // panel1
+            // tabConnectionManagerPage
             // 
-            this.panel1.Controls.Add(this.panel2);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 206);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(421, 38);
-            this.panel1.TabIndex = 7;
+            this.tabConnectionManagerPage.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.tabConnectionManagerPage.Controls.Add(this.buttonPreview);
+            this.tabConnectionManagerPage.Controls.Add(this.tabAccessMode);
+            this.tabConnectionManagerPage.Controls.Add(this.comboMode);
+            this.tabConnectionManagerPage.Controls.Add(this.label3);
+            this.tabConnectionManagerPage.Controls.Add(this.button1);
+            this.tabConnectionManagerPage.Controls.Add(this.comboConnection);
+            this.tabConnectionManagerPage.Controls.Add(this.label2);
+            this.tabConnectionManagerPage.Controls.Add(this.label1);
+            this.tabConnectionManagerPage.Location = new System.Drawing.Point(4, 22);
+            this.tabConnectionManagerPage.Name = "tabConnectionManagerPage";
+            this.tabConnectionManagerPage.Padding = new System.Windows.Forms.Padding(3);
+            this.tabConnectionManagerPage.Size = new System.Drawing.Size(650, 441);
+            this.tabConnectionManagerPage.TabIndex = 0;
+            this.tabConnectionManagerPage.Text = "ConnectionManager";
             // 
-            // panel2
+            // buttonPreview
             // 
-            this.panel2.Controls.Add(this.btnCancel);
-            this.panel2.Controls.Add(this.btnOK);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel2.Location = new System.Drawing.Point(251, 0);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(170, 38);
-            this.panel2.TabIndex = 8;
+            this.buttonPreview.Location = new System.Drawing.Point(29, 410);
+            this.buttonPreview.Name = "buttonPreview";
+            this.buttonPreview.Size = new System.Drawing.Size(109, 23);
+            this.buttonPreview.TabIndex = 7;
+            this.buttonPreview.Text = "Preview";
+            this.buttonPreview.UseVisualStyleBackColor = true;
             // 
-            // panel3
+            // tabAccessMode
             // 
-            this.panel3.Controls.Add(this.groupBox1);
-            this.panel3.Location = new System.Drawing.Point(12, 12);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(402, 84);
-            this.panel3.TabIndex = 9;
+            this.tabAccessMode.Controls.Add(this.tabTables);
+            this.tabAccessMode.Controls.Add(this.tabSQL);
+            this.tabAccessMode.Location = new System.Drawing.Point(25, 177);
+            this.tabAccessMode.Name = "tabAccessMode";
+            this.tabAccessMode.SelectedIndex = 0;
+            this.tabAccessMode.Size = new System.Drawing.Size(619, 230);
+            this.tabAccessMode.TabIndex = 6;
             // 
-            // groupBox1
+            // tabTables
             // 
-            this.groupBox1.Controls.Add(this.cbConnectionList);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.btnNewConnectionManager);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox1.Location = new System.Drawing.Point(0, 0);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(402, 84);
-            this.groupBox1.TabIndex = 9;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Connection Settings";
+            this.tabTables.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.tabTables.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tabTables.Controls.Add(this.comboBox1);
+            this.tabTables.Controls.Add(this.label4);
+            this.tabTables.Location = new System.Drawing.Point(4, 22);
+            this.tabTables.Name = "tabTables";
+            this.tabTables.Padding = new System.Windows.Forms.Padding(3);
+            this.tabTables.Size = new System.Drawing.Size(611, 204);
+            this.tabTables.TabIndex = 0;
+            this.tabTables.Text = "Table";
             // 
-            // cbConnectionList
+            // comboBox1
             // 
-            this.cbConnectionList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbConnectionList.FormattingEnabled = true;
-            this.cbConnectionList.Location = new System.Drawing.Point(120, 33);
-            this.cbConnectionList.Name = "cbConnectionList";
-            this.cbConnectionList.Size = new System.Drawing.Size(188, 21);
-            this.cbConnectionList.TabIndex = 1;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(41, 37);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(403, 21);
+            this.comboBox1.TabIndex = 1;
             // 
-            // label1
+            // label4
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 36);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(106, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Connection Manager";
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(38, 20);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(137, 13);
+            this.label4.TabIndex = 0;
+            this.label4.Text = "Name of the table or a view";
             // 
-            // btnNewConnectionManager
+            // tabSQL
             // 
-            this.btnNewConnectionManager.Location = new System.Drawing.Point(314, 33);
-            this.btnNewConnectionManager.Name = "btnNewConnectionManager";
-            this.btnNewConnectionManager.Size = new System.Drawing.Size(75, 23);
-            this.btnNewConnectionManager.TabIndex = 2;
-            this.btnNewConnectionManager.Text = "New";
-            this.btnNewConnectionManager.UseVisualStyleBackColor = true;
-            this.btnNewConnectionManager.Click += new System.EventHandler(this.btnNewConnectionManager_Click);
+            this.tabSQL.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.tabSQL.Controls.Add(this.button5);
+            this.tabSQL.Controls.Add(this.button4);
+            this.tabSQL.Controls.Add(this.button3);
+            this.tabSQL.Controls.Add(this.button2);
+            this.tabSQL.Controls.Add(this.richTextBox1);
+            this.tabSQL.Controls.Add(this.label5);
+            this.tabSQL.Location = new System.Drawing.Point(4, 22);
+            this.tabSQL.Name = "tabSQL";
+            this.tabSQL.Padding = new System.Windows.Forms.Padding(3);
+            this.tabSQL.Size = new System.Drawing.Size(611, 204);
+            this.tabSQL.TabIndex = 1;
+            this.tabSQL.Text = "SQL";
             // 
-            // panel4
+            // button5
             // 
-            this.panel4.Controls.Add(this.groupBox2);
-            this.panel4.Location = new System.Drawing.Point(13, 105);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(401, 79);
-            this.panel4.TabIndex = 10;
+            this.button5.Location = new System.Drawing.Point(483, 156);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(104, 23);
+            this.button5.TabIndex = 5;
+            this.button5.Text = "Parse Query";
+            this.button5.UseVisualStyleBackColor = true;
             // 
-            // groupBox2
+            // button4
             // 
-            this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Controls.Add(this.txtQueueName);
-            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox2.Location = new System.Drawing.Point(0, 0);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(401, 79);
-            this.groupBox2.TabIndex = 0;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "TARGITD3FO DataReader  Configuration";
+            this.button4.Location = new System.Drawing.Point(483, 115);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(104, 23);
+            this.button4.TabIndex = 4;
+            this.button4.Text = "Browse";
+            this.button4.UseVisualStyleBackColor = true;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(483, 74);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(104, 23);
+            this.button3.TabIndex = 3;
+            this.button3.Text = "Query Builder";
+            this.button3.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(483, 33);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(104, 23);
+            this.button2.TabIndex = 2;
+            this.button2.Text = "Parameters";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.richTextBox1.Location = new System.Drawing.Point(10, 33);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(435, 147);
+            this.richTextBox1.TabIndex = 1;
+            this.richTextBox1.Text = "";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(7, 7);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(97, 13);
+            this.label5.TabIndex = 0;
+            this.label5.Text = "SQL command test";
+            // 
+            // comboMode
+            // 
+            this.comboMode.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.comboMode.FormattingEnabled = true;
+            this.comboMode.Items.AddRange(new object[] {
+            "Table or view",
+            "SQL command"});
+            this.comboMode.Location = new System.Drawing.Point(22, 138);
+            this.comboMode.Name = "comboMode";
+            this.comboMode.Size = new System.Drawing.Size(452, 21);
+            this.comboMode.TabIndex = 5;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(22, 108);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(96, 13);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Data access mode";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(512, 63);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(104, 23);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "New ...";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // comboConnection
+            // 
+            this.comboConnection.FormattingEnabled = true;
+            this.comboConnection.Location = new System.Drawing.Point(22, 65);
+            this.comboConnection.Name = "comboConnection";
+            this.comboConnection.Size = new System.Drawing.Size(452, 21);
+            this.comboConnection.TabIndex = 2;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 29);
+            this.label2.Location = new System.Drawing.Point(19, 37);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(70, 13);
-            this.label2.TabIndex = 8;
-            this.label2.Text = "Queue Name";
+            this.label2.Size = new System.Drawing.Size(105, 13);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Connection manager";
             // 
-            // txtQueueName
+            // label1
             // 
-            this.txtQueueName.Location = new System.Drawing.Point(119, 26);
-            this.txtQueueName.Name = "txtQueueName";
-            this.txtQueueName.Size = new System.Drawing.Size(188, 20);
-            this.txtQueueName.TabIndex = 7;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(16, 7);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(532, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Specify TARGIT D3FO connection manager , a data source and select data access mod" +
+    "e. Edit SQL command.";
             // 
-            // RabbitMQSourceUIForm
+            // tabColumnsPage
             // 
-            this.AcceptButton = this.btnOK;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(421, 244);
-            this.Controls.Add(this.panel4);
-            this.Controls.Add(this.panel3);
-            this.Controls.Add(this.panel1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
-            this.Name = "TARGITSourceUIForm";
-            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.Text = "TARGIT Source Editor";
-            this.Load += new System.EventHandler(this.RabbitMQSourceUIForm_Load);
-            this.panel1.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.panel4.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
+            this.tabColumnsPage.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.tabColumnsPage.Controls.Add(this.panel2);
+            this.tabColumnsPage.Controls.Add(this.panel1);
+            this.tabColumnsPage.Location = new System.Drawing.Point(4, 22);
+            this.tabColumnsPage.Name = "tabColumnsPage";
+            this.tabColumnsPage.Padding = new System.Windows.Forms.Padding(3);
+            this.tabColumnsPage.Size = new System.Drawing.Size(650, 441);
+            this.tabColumnsPage.TabIndex = 1;
+            this.tabColumnsPage.Text = "Columns";
+            // 
+            // tabErrorOutputPage
+            // 
+            this.tabErrorOutputPage.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.tabErrorOutputPage.Controls.Add(this.panel3);
+            this.tabErrorOutputPage.Location = new System.Drawing.Point(4, 22);
+            this.tabErrorOutputPage.Name = "tabErrorOutputPage";
+            this.tabErrorOutputPage.Padding = new System.Windows.Forms.Padding(3);
+            this.tabErrorOutputPage.Size = new System.Drawing.Size(650, 441);
+            this.tabErrorOutputPage.TabIndex = 2;
+            this.tabErrorOutputPage.Text = "ErrorOutput";
+            // 
+            // panel1
+            // 
+            this.panel1.Location = new System.Drawing.Point(7, 19);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(627, 186);
+            this.panel1.TabIndex = 0;
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.White;
+            this.panel2.Location = new System.Drawing.Point(7, 225);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(627, 200);
+            this.panel2.TabIndex = 1;
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.White;
+            this.panel3.Location = new System.Drawing.Point(6, 22);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(638, 386);
+            this.panel3.TabIndex = 0;
+            // 
+            // buttonOK
+            // 
+            this.buttonOK.Location = new System.Drawing.Point(530, 485);
+            this.buttonOK.Name = "buttonOK";
+            this.buttonOK.Size = new System.Drawing.Size(95, 36);
+            this.buttonOK.TabIndex = 2;
+            this.buttonOK.Text = "OK";
+            this.buttonOK.UseVisualStyleBackColor = true;
+            // 
+            // buttonCancel
+            // 
+            this.buttonCancel.Location = new System.Drawing.Point(659, 485);
+            this.buttonCancel.Name = "buttonCancel";
+            this.buttonCancel.Size = new System.Drawing.Size(75, 35);
+            this.buttonCancel.TabIndex = 3;
+            this.buttonCancel.Text = "Cancel";
+            this.buttonCancel.UseVisualStyleBackColor = true;
+            // 
+            // buttonHelp
+            // 
+            this.buttonHelp.Location = new System.Drawing.Point(777, 485);
+            this.buttonHelp.Name = "buttonHelp";
+            this.buttonHelp.Size = new System.Drawing.Size(75, 36);
+            this.buttonHelp.TabIndex = 4;
+            this.buttonHelp.Text = "Help";
+            this.buttonHelp.UseVisualStyleBackColor = true;
+            // 
+            // TARGITD3FODataReaderComponentEditor
+            // 
+            this.ClientSize = new System.Drawing.Size(923, 536);
+            this.Controls.Add(this.buttonHelp);
+            this.Controls.Add(this.buttonCancel);
+            this.Controls.Add(this.buttonOK);
+            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.listBox1);
+            this.Name = "TARGITD3FODataReaderComponentEditor";
+            this.tabControl1.ResumeLayout(false);
+            this.tabConnectionManagerPage.ResumeLayout(false);
+            this.tabConnectionManagerPage.PerformLayout();
+            this.tabAccessMode.ResumeLayout(false);
+            this.tabTables.ResumeLayout(false);
+            this.tabTables.PerformLayout();
+            this.tabSQL.ResumeLayout(false);
+            this.tabSQL.PerformLayout();
+            this.tabColumnsPage.ResumeLayout(false);
+            this.tabErrorOutputPage.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
-
-#endregion
-
-        private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Panel panel3;
-        
-        private System.Windows.Forms.ComboBox cbConnectionList;
-        
-        private System.Windows.Forms.Button btnNewConnectionManager;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox txtQueueName;
-        }
+    }
 
 
     }
