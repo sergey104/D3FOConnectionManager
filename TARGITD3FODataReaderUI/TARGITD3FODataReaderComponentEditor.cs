@@ -43,6 +43,33 @@ namespace TARGITD3FOConnection
         private Button buttonHelp;
         private TabPage tabErrorOutputPage;
 
+        private Microsoft.SqlServer.Dts.Pipeline.Wrapper.IDTSComponentMetaData100 metaData;
+        private IServiceProvider serviceProvider;
+        private IDtsConnectionService connectionService;
+        private CManagedComponentWrapper designTimeInstance;
+
+        private class ConnectionManagerItem
+        {
+            public string ID;
+            public string Name { get; set; }
+            public TARGITD3FOConnection.D3FOConnectionManager ConnManager { get; set; }
+
+            public override string ToString()
+            {
+                return Name;
+            }
+        }
+        public TARGITD3FODataReaderComponentEditor(Microsoft.SqlServer.Dts.Pipeline.Wrapper.IDTSComponentMetaData100 metaData, IServiceProvider serviceProvider)
+    {
+            InitializeComponent();
+            this.metaData = metaData;
+            this.serviceProvider = serviceProvider;
+            this.connectionService = (IDtsConnectionService)serviceProvider.GetService(typeof(IDtsConnectionService));
+            this.designTimeInstance = metaData.Instantiate();
+        }
+
+
+
         private void InitializeComponent()
         {
             this.listBox1 = new System.Windows.Forms.ListBox();
@@ -67,9 +94,9 @@ namespace TARGITD3FOConnection
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.tabColumnsPage = new System.Windows.Forms.TabPage();
-            this.tabErrorOutputPage = new System.Windows.Forms.TabPage();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.tabErrorOutputPage = new System.Windows.Forms.TabPage();
             this.panel3 = new System.Windows.Forms.Panel();
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
@@ -206,7 +233,7 @@ namespace TARGITD3FOConnection
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(104, 23);
             this.button4.TabIndex = 4;
-            this.button4.Text = "Browse";
+            this.button4.Text = "Browse...";
             this.button4.UseVisualStyleBackColor = true;
             // 
             // button3
@@ -243,7 +270,7 @@ namespace TARGITD3FOConnection
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(97, 13);
             this.label5.TabIndex = 0;
-            this.label5.Text = "SQL command test";
+            this.label5.Text = "SQL command text";
             // 
             // comboMode
             // 
@@ -274,6 +301,7 @@ namespace TARGITD3FOConnection
             this.button1.TabIndex = 3;
             this.button1.Text = "New ...";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // comboConnection
             // 
@@ -314,6 +342,21 @@ namespace TARGITD3FOConnection
             this.tabColumnsPage.TabIndex = 1;
             this.tabColumnsPage.Text = "Columns";
             // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.White;
+            this.panel2.Location = new System.Drawing.Point(7, 225);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(627, 200);
+            this.panel2.TabIndex = 1;
+            // 
+            // panel1
+            // 
+            this.panel1.Location = new System.Drawing.Point(7, 19);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(627, 186);
+            this.panel1.TabIndex = 0;
+            // 
             // tabErrorOutputPage
             // 
             this.tabErrorOutputPage.BackColor = System.Drawing.Color.WhiteSmoke;
@@ -324,21 +367,6 @@ namespace TARGITD3FOConnection
             this.tabErrorOutputPage.Size = new System.Drawing.Size(650, 441);
             this.tabErrorOutputPage.TabIndex = 2;
             this.tabErrorOutputPage.Text = "ErrorOutput";
-            // 
-            // panel1
-            // 
-            this.panel1.Location = new System.Drawing.Point(7, 19);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(627, 186);
-            this.panel1.TabIndex = 0;
-            // 
-            // panel2
-            // 
-            this.panel2.BackColor = System.Drawing.Color.White;
-            this.panel2.Location = new System.Drawing.Point(7, 225);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(627, 200);
-            this.panel2.TabIndex = 1;
             // 
             // panel3
             // 
@@ -359,9 +387,9 @@ namespace TARGITD3FOConnection
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(659, 485);
+            this.buttonCancel.Location = new System.Drawing.Point(652, 485);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(75, 35);
+            this.buttonCancel.Size = new System.Drawing.Size(82, 35);
             this.buttonCancel.TabIndex = 3;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
@@ -370,7 +398,7 @@ namespace TARGITD3FOConnection
             // 
             this.buttonHelp.Location = new System.Drawing.Point(777, 485);
             this.buttonHelp.Name = "buttonHelp";
-            this.buttonHelp.Size = new System.Drawing.Size(75, 36);
+            this.buttonHelp.Size = new System.Drawing.Size(85, 36);
             this.buttonHelp.TabIndex = 4;
             this.buttonHelp.Text = "Help";
             this.buttonHelp.UseVisualStyleBackColor = true;
@@ -396,6 +424,60 @@ namespace TARGITD3FOConnection
             this.tabErrorOutputPage.ResumeLayout(false);
             this.ResumeLayout(false);
 
+        }
+
+        private void TARGITD3FODataReaderComponentEditor_Load(object sender, EventArgs e)
+        {
+            var connections = connectionService.GetConnections();
+
+            var queueName = metaData.CustomPropertyCollection[0];
+          comboMode.Text = queueName.Value;
+
+            string connectionManagerId = string.Empty;
+
+            var currentConnectionManager = this.metaData.RuntimeConnectionCollection[0];
+            if (currentConnectionManager != null)
+            {
+                connectionManagerId = currentConnectionManager.ConnectionManagerID;
+            }
+
+            for (int i = 0; i < connections.Count; i++)
+            {
+                var conn = connections[i].InnerObject as TARGITD3FOConnection.D3FOConnectionManager;
+
+                if (conn != null)
+                {
+                    var item = new ConnectionManagerItem()
+                    {
+                        Name = connections[i].Name,
+                        ConnManager = conn,
+                        ID = connections[i].ID
+                    };
+                    comboConnection.Items.Add(item);
+
+                    if (connections[i].ID.Equals(connectionManagerId))
+                    {
+                        comboConnection.SelectedIndex = i;
+                    }
+                }
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            System.Collections.ArrayList created = connectionService.CreateConnection("TARGITD3FOConnection");
+
+            foreach (ConnectionManager cm in created)
+            {
+                var item = new ConnectionManagerItem()
+                {
+                    Name = cm.Name,
+                    ConnManager = cm.InnerObject as TARGITD3FOConnection.D3FOConnectionManager,
+                    ID = cm.ID
+                };
+
+                comboConnection.Items.Insert(0, item);
+            }
         }
     }
 
