@@ -5,7 +5,7 @@ using Microsoft.SqlServer.Dts.Runtime.Design;
 using System.Windows.Forms;
 using DTSRuntime = Microsoft.SqlServer.Dts.Runtime;
 
-namespace TARGITD3FOConnection1
+namespace TARGITD3FOConnection
 {
     public class TARGITD3FODataReaderInterface : IDtsComponentUI
       {

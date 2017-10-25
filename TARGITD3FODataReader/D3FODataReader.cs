@@ -16,7 +16,7 @@ namespace TARGITD3FOConnection
 {
     [DtsPipelineComponent(DisplayName = "TARGITD3FODataReader",
     ComponentType = ComponentType.SourceAdapter,  Description = "TARGITD3FO Connection Source",
-   UITypeName = " TARGITD3FOConnection.TARGITD3FODataReaderInterface, TARGITD3FODataReaderUI, Version = 1.0.0.0, Culture = neutral, PublicKeyToken=71aabddac4fee55e")]
+   UITypeName = " TARGITD3FOConnection.TARGITD3FODataReaderInterface, TARGITD3FODataReader, Version = 1.0.0.0, Culture = neutral, PublicKeyToken=71aabddac4fee55e")]
         public class TARGITD3FODataReader : PipelineComponent
     {
         private DbDataReader sqlReader;

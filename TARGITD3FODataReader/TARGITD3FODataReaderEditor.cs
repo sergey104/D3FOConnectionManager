@@ -9,7 +9,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-namespace TARGITD3FOConnection1
+namespace TARGITD3FOConnection
 {
     public partial class TARGITD3FODataReaderEditor: Form
     {
@@ -68,7 +68,10 @@ namespace TARGITD3FOConnection1
             this.designTimeInstance = metaData.Instantiate();
         }
 
-
+        public TARGITD3FODataReaderEditor()
+        {
+            
+        }
 
         private void InitializeComponent()
         {
@@ -431,7 +434,7 @@ namespace TARGITD3FOConnection1
             var connections = connectionService.GetConnections();
 
             var queueName = metaData.CustomPropertyCollection[0];
-          comboMode.Text = queueName.Value;
+       //   comboMode.Text = queueName.Value;
 
             string connectionManagerId = string.Empty;
 
