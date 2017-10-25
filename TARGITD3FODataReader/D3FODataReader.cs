@@ -14,10 +14,10 @@ using System.Data.Common;
 
 namespace TARGITD3FOConnection
 {
-    [DtsPipelineComponent(DisplayName = "TARGITD3FODataReaderComponent",
+    [DtsPipelineComponent(DisplayName = "TARGITD3FODataReader",
     ComponentType = ComponentType.SourceAdapter,  Description = "TARGITD3FO Connection Source",
-   UITypeName = "TARGITD3FOConnection.TARGITD3FODataReaderComponentInterface, TARGITD3FODataReaderUI, Version = 1.0.0.0, Culture = neutral11, PublicKeyToken=71aabddac4fee55e")]
-        public class TARGITD3FODataReaderComponent : PipelineComponent
+   UITypeName = " TARGITD3FOConnection.TARGITD3FODataReaderInterface, TARGITD3FODataReaderUI, Version = 1.0.0.0, Culture = neutral, PublicKeyToken=71aabddac4fee55e")]
+        public class TARGITD3FODataReader : PipelineComponent
     {
         private DbDataReader sqlReader;
         public D3FOConnectionManager cm;
@@ -25,8 +25,8 @@ namespace TARGITD3FOConnection
         public IDTSRuntimeConnection100 connection;
         public IDTSOutput100 output;
         public DbConnection sqlConn;
-
-        public TARGITD3FODataReaderComponent()
+        
+        public TARGITD3FODataReader()
         {
             cm = new D3FOConnectionManager();
             cm.AcquireConnection(null);
@@ -49,7 +49,7 @@ namespace TARGITD3FOConnection
             
 
             connection = ComponentMetaData.RuntimeConnectionCollection.New();
-            connection.Name = "TARGITDataSource";
+            connection.Name = "TARGITD3FOConnection";
             connection.ConnectionManagerID = "TARGITDataSource";
 
             

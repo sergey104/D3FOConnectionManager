@@ -71,18 +71,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TARGITD3FODataReaderComponentEditor.cs">
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="TARGITD3FODataReaderEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TARGITD3FODataReaderComponentInterface.cs" />
+    <Compile Include="TARGITD3FODataReaderInterface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="D3FOConnectionManager.snk" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="TARGITD3FODataReaderComponentEditor.resx">
-      <DependentUpon>TARGITD3FODataReaderComponentEditor.cs</DependentUpon>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TARGITD3FODataReaderEditor.resx">
+      <DependentUpon>TARGITD3FODataReaderEditor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -90,12 +99,20 @@
       <Project>{7f791bac-9a89-498b-9d0e-ffa02e8cbbec}</Project>
       <Name>TARGITD3FOConnectionManager</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TARGITD3FODataReader\TARGITD3FODataReader.csproj">
+      <Project>{7433374f-da8f-40f9-91a6-0cc3b7de9a89}</Project>
+      <Name>TARGITD3FODataReader</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\Icon1.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>cd $(ProjectDir)
-@SET CONNECTIONSDIR="C:\Program Files (x86)\Microsoft SQL Server\120\DTS\PipelineComponents\"
-@SET CONNECTIONSDIR64="C:\Program Files\Microsoft SQL Server\120\DTS\PipelineComponents\"
+@SET CONNECTIONSDIR="C:\Program Files (x86)\Microsoft SQL Server\120\DTS\Connections\"
+@SET CONNECTIONSDIR64="C:\Program Files\Microsoft SQL Server\120\DTS\Connections\"
 @SET GACUTIL="C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.7 Tools\x64\gacutil.exe"
 Echo Installing dll in GAC
 Echo $(OutDir)
@@ -108,6 +125,19 @@ copy "$(OutDir)$(TargetFileName)" "C:\Program Files (x86)\Microsoft SQL Server\1
 copy "$(OutDir)$(TargetFileName)" "C:\Program Files\Microsoft SQL Server\120\DTS\PipelineComponents\" /y
 copy "$(OutDir)$(TargetFileName)" "C:\Program Files\Microsoft SQL Server\130\DTS\PipelineComponents\" /y
 copy "$(OutDir)$(TargetFileName)" "D:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\CommonExtensions\Microsoft\SSIS\140\PipeLineComponents\"
+copy "$(TargetDir)TARGITD3FODataReaderUI.dll" "D:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Public Assemblies\" /y
+copy "$(TargetDir)TARGITD3FODataReaderUI.dll" "D:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\PublicAssemblies\"
+
+
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files (x86)\Microsoft SQL Server\130\DTS\PipelineComponents\TARGITD3FODataReaderUI.dll "
+copy "$(OutDir)$(TargetFileName)" "D:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\CommonExtensions\Microsoft\SSIS\140\PipelineComponents\"
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files (x86)\Microsoft SQL Server\110\DTS\PipelineComponents\$(TargetFileName)" /y
+ 
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\PrivateAssemblies\" /y
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files\Microsoft SQL Server\130\DTS\" /y
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files\Microsoft SQL Server\130\DTS\PipelineComponents\" /y
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files (x86)\Microsoft SQL Server\130\DTS\" /y
+copy "$(OutDir)$(TargetFileName)" "C:\Program Files (x86)\Microsoft SQL Server\130\DTS\PipelineComponents\" /y
 copy "$(TargetDir)TARGITD3FODataReaderUI.dll" "D:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Public Assemblies\" /y
 </PostBuildEvent>
   </PropertyGroup>

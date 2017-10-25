@@ -11,9 +11,9 @@ using System.Text;
 using System.Windows.Forms;
 namespace TARGITD3FOConnection
 {
-    public partial class TARGITD3FODataReaderComponentEditor: Form
+    public partial class TARGITD3FODataReaderEditor: Form
     {
-        private ListBox listBox1;
+       private ListBox listBox1;
         private TabControl tabControl1;
         private TabPage tabConnectionManagerPage;
         private Button button1;
@@ -59,7 +59,7 @@ namespace TARGITD3FOConnection
                 return Name;
             }
         }
-        public TARGITD3FODataReaderComponentEditor(Microsoft.SqlServer.Dts.Pipeline.Wrapper.IDTSComponentMetaData100 metaData, IServiceProvider serviceProvider)
+        public TARGITD3FODataReaderEditor(Microsoft.SqlServer.Dts.Pipeline.Wrapper.IDTSComponentMetaData100 metaData, IServiceProvider serviceProvider)
     {
             InitializeComponent();
             this.metaData = metaData;
@@ -478,7 +478,7 @@ namespace TARGITD3FOConnection
 
                 comboConnection.Items.Insert(0, item);
             }
-        }
+        } 
     }
 
 
