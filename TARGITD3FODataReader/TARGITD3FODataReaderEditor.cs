@@ -2,12 +2,6 @@
 using Microsoft.SqlServer.Dts.Runtime;
 using Microsoft.SqlServer.Dts.Runtime.Design;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Data.Common;
@@ -63,6 +57,17 @@ namespace TARGITD3FOConnection
             public string ID;
             public string Name { get; set; }
             public TARGITD3FOConnection.D3FOConnectionManager ConnManager { get; set; }
+
+            public override string ToString()
+            {
+                return Name;
+            }
+        }
+        private class TableItem
+        {
+            public int ID;
+            public string Name { get; set; }
+           
 
             public override string ToString()
             {
@@ -482,12 +487,23 @@ namespace TARGITD3FOConnection
                 }
             }
             ExecuteSQL();
-            while (sqlReader.Read())
+            if(sqlReader !=null)
             {
+                int k = 0;
+                while (sqlReader.Read())
+                {
+                    var item = new TableItem()
+                    {
+                        Name = (String.Format("{0}", sqlReader[0])),
+                        ID = k
+                    };
+                    comboTablesList.Items.Add(item);
 
-                string s0 = (String.Format("{0}", sqlReader[0]));
-                comboTablesList.Items.Add(s0);
+
+                }
+
             }
+            
         }
 
         private void button1_Click(object sender, EventArgs e)
