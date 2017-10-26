@@ -31,8 +31,8 @@ namespace TARGITD3FOConnection
 
           private DialogResult ShowForm(IWin32Window window)
           {
-          //    TARGITD3FODataReaderEditor form = new TARGITD3FODataReaderEditor(metaData, serviceProvider);
-              TARGITD3FODataReaderEditor form = new TARGITD3FODataReaderEditor();
+              TARGITD3FODataReaderEditor form = new TARGITD3FODataReaderEditor(metaData, serviceProvider);
+            //  TARGITD3FODataReaderEditor form = new TARGITD3FODataReaderEditor();
 
               return form.ShowDialog(window);
           }
@@ -49,13 +49,13 @@ namespace TARGITD3FOConnection
           {
               ShowForm(parentWindow);
           }
-        public ContainerControl GetView()
-        {
-            TARGITD3FODataReaderEditor editor = new TARGITD3FODataReaderEditor();
-         //   editor.ConnectionManager = this._connectionManager;
+   //     public ContainerControl GetView()
+    //    {
+     //       TARGITD3FODataReaderEditor editor = new TARGITD3FODataReaderEditor();
+           // editor.ConnectionManager = this._connectionManager;
          //   editor.ServiceProvider = this._serviceProvider;
-            return editor;
-        }
+     //       return editor;
+   //     }
     } 
 
 }

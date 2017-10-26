@@ -9,6 +9,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Diagnostics;
+
+
 namespace TARGITD3FOConnection
 {
     public partial class TARGITD3FODataReaderEditor: Form
@@ -70,7 +73,9 @@ namespace TARGITD3FOConnection
 
         public TARGITD3FODataReaderEditor()
         {
-            
+
+
+
         }
 
         private void InitializeComponent()
@@ -126,6 +131,7 @@ namespace TARGITD3FOConnection
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(150, 454);
             this.listBox1.TabIndex = 0;
+            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // tabControl1
             // 
@@ -406,7 +412,7 @@ namespace TARGITD3FOConnection
             this.buttonHelp.Text = "Help";
             this.buttonHelp.UseVisualStyleBackColor = true;
             // 
-            // TARGITD3FODataReaderComponentEditor
+            // TARGITD3FODataReaderEditor
             // 
             this.ClientSize = new System.Drawing.Size(923, 536);
             this.Controls.Add(this.buttonHelp);
@@ -414,7 +420,8 @@ namespace TARGITD3FOConnection
             this.Controls.Add(this.buttonOK);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.listBox1);
-            this.Name = "TARGITD3FODataReaderComponentEditor";
+            this.Name = "TARGITD3FODataReaderEditor";
+            this.Load += new System.EventHandler(this.TARGITD3FODataReaderEditor_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabConnectionManagerPage.ResumeLayout(false);
             this.tabConnectionManagerPage.PerformLayout();
@@ -429,11 +436,11 @@ namespace TARGITD3FOConnection
 
         }
 
-        private void TARGITD3FODataReaderComponentEditor_Load(object sender, EventArgs e)
+        private void TARGITD3FODataReaderEditor_Load(object sender, EventArgs e)
         {
             var connections = connectionService.GetConnections();
 
-            var queueName = metaData.CustomPropertyCollection[0];
+         //   var queueName = metaData.CustomPropertyCollection[0];
        //   comboMode.Text = queueName.Value;
 
             string connectionManagerId = string.Empty;
@@ -442,7 +449,7 @@ namespace TARGITD3FOConnection
             if (currentConnectionManager != null)
             {
                 connectionManagerId = currentConnectionManager.ConnectionManagerID;
-            }
+           }
 
             for (int i = 0; i < connections.Count; i++)
             {
@@ -481,7 +488,24 @@ namespace TARGITD3FOConnection
 
                 comboConnection.Items.Insert(0, item);
             }
-        } 
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch(listBox1.SelectedIndex)
+            {
+                case 0: tabControl1.SelectedIndex = 0;
+                    break;
+                case 1: tabControl1.SelectedIndex = 1;
+                    break;
+                case 2: tabControl1.SelectedIndex = 2;
+                    break;
+                default: tabControl1.SelectedIndex = 0;
+                    break;
+
+
+            }
+        }
     }
 
 
