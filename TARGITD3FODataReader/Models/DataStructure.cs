@@ -10,6 +10,16 @@ namespace TARGITD3FODataReader.Models
 {
     public class DataStructure
     {
+        private string _name; // String.Empty;
+        public string Name
+        {
+            get { return this._name; }
+            set { this._name = value; }
+        }
+        private List<TableItem> _tables = new List<TableItem>();
+
+        public List<TableItem> Tables { get { return _tables; } }
+        public DataStructure() { }
     }
     ////
     public class FieldItem
@@ -45,7 +55,10 @@ namespace TARGITD3FODataReader.Models
             get { return this._name; }
             set { this._name = value; }
         }
-        public List<FieldItem> Fields;
+        private List<FieldItem> _fields = new List<FieldItem>();
+        
+        public List<FieldItem> Fields { get { return _fields; } }
+        public TableItem() { }
     }
 
 }
