@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
-
+using System.Data.Common;
 
 namespace TARGITD3FOConnection
 {
@@ -30,7 +30,7 @@ namespace TARGITD3FOConnection
         private TabPage tabTables;
         private Label label4;
         private TabPage tabSQL;
-        private ComboBox comboBox1;
+        private ComboBox comboTablesList;
         private Button buttonPreview;
         private RichTextBox richTextBox1;
         private Label label5;
@@ -50,6 +50,13 @@ namespace TARGITD3FOConnection
         private IServiceProvider serviceProvider;
         private IDtsConnectionService connectionService;
         private CManagedComponentWrapper designTimeInstance;
+
+        private DbDataReader sqlReader;
+        public D3FOConnectionManager cm;
+        public IDTSCustomProperty100 queueName;
+        public IDTSRuntimeConnection100 connection;
+        public IDTSOutput100 output;
+        public DbConnection sqlConn;
 
         private class ConnectionManagerItem
         {
@@ -86,7 +93,7 @@ namespace TARGITD3FOConnection
             this.buttonPreview = new System.Windows.Forms.Button();
             this.tabAccessMode = new System.Windows.Forms.TabControl();
             this.tabTables = new System.Windows.Forms.TabPage();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.comboTablesList = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.tabSQL = new System.Windows.Forms.TabPage();
             this.button5 = new System.Windows.Forms.Button();
@@ -185,7 +192,7 @@ namespace TARGITD3FOConnection
             // 
             this.tabTables.BackColor = System.Drawing.Color.WhiteSmoke;
             this.tabTables.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tabTables.Controls.Add(this.comboBox1);
+            this.tabTables.Controls.Add(this.comboTablesList);
             this.tabTables.Controls.Add(this.label4);
             this.tabTables.Location = new System.Drawing.Point(4, 22);
             this.tabTables.Name = "tabTables";
@@ -194,13 +201,13 @@ namespace TARGITD3FOConnection
             this.tabTables.TabIndex = 0;
             this.tabTables.Text = "Table";
             // 
-            // comboBox1
+            // comboTablesList
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(41, 37);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(403, 21);
-            this.comboBox1.TabIndex = 1;
+            this.comboTablesList.FormattingEnabled = true;
+            this.comboTablesList.Location = new System.Drawing.Point(41, 37);
+            this.comboTablesList.Name = "comboTablesList";
+            this.comboTablesList.Size = new System.Drawing.Size(403, 21);
+            this.comboTablesList.TabIndex = 1;
             // 
             // label4
             // 
@@ -292,6 +299,7 @@ namespace TARGITD3FOConnection
             this.comboMode.Name = "comboMode";
             this.comboMode.Size = new System.Drawing.Size(452, 21);
             this.comboMode.TabIndex = 5;
+            this.comboMode.SelectedIndexChanged += new System.EventHandler(this.comboMode_SelectedIndexChanged);
             // 
             // label3
             // 
@@ -449,6 +457,7 @@ namespace TARGITD3FOConnection
             if (currentConnectionManager != null)
             {
                 connectionManagerId = currentConnectionManager.ConnectionManagerID;
+                
            }
 
             for (int i = 0; i < connections.Count; i++)
@@ -468,8 +477,16 @@ namespace TARGITD3FOConnection
                     if (connections[i].ID.Equals(connectionManagerId))
                     {
                         comboConnection.SelectedIndex = i;
+                        cm = conn;
                     }
                 }
+            }
+            ExecuteSQL();
+            while (sqlReader.Read())
+            {
+
+                string s0 = (String.Format("{0}", sqlReader[0]));
+                comboTablesList.Items.Add(s0);
             }
         }
 
@@ -505,6 +522,54 @@ namespace TARGITD3FOConnection
 
 
             }
+        }
+
+        private void comboMode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (comboMode.SelectedIndex)
+            {
+                case 0:
+                    tabAccessMode.SelectedIndex = 0;
+                    break;
+                case 1:
+                    tabAccessMode.SelectedIndex = 1;
+                    break;
+                default:
+                    tabAccessMode.SelectedIndex = 0;
+                    break;
+
+
+            }
+        }
+
+        public  void ExecuteSQL()
+        {
+
+            try
+            {
+                MessageBox.Show("DBeeeeeee");
+
+                cm = new D3FOConnectionManager();
+                cm.AcquireConnection(null);
+                sqlConn = cm.GetDbConnection();
+                //  DbConnection sqlConn = (DbConnection)connection;
+                sqlConn.Open();
+                DbCommand cmd = sqlConn.CreateCommand();
+                MessageBox.Show("DBBBBBBB!");
+                cmd.CommandText = "SELECT * FROM [sys].tables";
+                cmd.CommandType = System.Data.CommandType.Text;
+                MessageBox.Show("DBBBBBBB2222!");
+                sqlReader = cmd.ExecuteReader();
+            }
+            catch (Exception)
+            {
+               
+                throw;
+            }
+
+
+
+            
         }
     }
 
