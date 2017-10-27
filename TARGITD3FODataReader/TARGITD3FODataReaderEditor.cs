@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Data.Common;
 using TARGITD3FODataReader.Models;
+using System.Collections.Generic;
 
 namespace TARGITD3FOConnection
 {
@@ -52,6 +53,7 @@ namespace TARGITD3FOConnection
         public IDTSRuntimeConnection100 connection;
         public IDTSOutput100 output;
         public DbConnection sqlConn;
+        private ConnectionManagerItem currentManager = new ConnectionManagerItem();
 
         private class ConnectionManagerItem
         {
@@ -59,24 +61,14 @@ namespace TARGITD3FOConnection
             public string Name { get; set; }
             public TARGITD3FOConnection.D3FOConnectionManager ConnManager { get; set; }
 
-            public DataStructure ds;
+            public DataStructure ds = new DataStructure();
 
             public override string ToString()
             {
                 return Name;
             }
         }
-        private class TableItem
-        {
-            public int ID;
-            public string Name { get; set; }
-           
-
-            public override string ToString()
-            {
-                return Name;
-            }
-        }
+        List<ConnectionManagerItem> connectionlist = new List<ConnectionManagerItem>();
         public TARGITD3FODataReaderEditor(Microsoft.SqlServer.Dts.Pipeline.Wrapper.IDTSComponentMetaData100 metaData, IServiceProvider serviceProvider)
     {
             InitializeComponent();
@@ -95,6 +87,9 @@ namespace TARGITD3FOConnection
 
         private void InitializeComponent()
         {
+#if DEBUG
+Debugger.Launch();
+#endif
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabConnectionManagerPage = new System.Windows.Forms.TabPage();
@@ -480,32 +475,53 @@ namespace TARGITD3FOConnection
                         ConnManager = conn,
                         ID = connections[i].ID
                     };
+                    currentManager = item;
+                    connectionlist.Add(item);
                     comboConnection.Items.Add(item);
 
                     if (connections[i].ID.Equals(connectionManagerId))
                     {
                         comboConnection.SelectedIndex = i;
                         cm = conn;
+                        currentManager = item;
                     }
                 }
             }
-            ExecuteSQL();
-            if(sqlReader !=null)
+            if(connectionlist.Count > 0)
             {
-                int k = 0;
-                while (sqlReader.Read())
+                foreach(var item in connectionlist)
                 {
-                    var item = new TableItem()
+                    ExecuteSQL(item.ConnManager);
+                    if (sqlReader != null)
                     {
-                        Name = (String.Format("{0}", sqlReader[0])),
-                        ID = k
-                    };
-                    comboTablesList.Items.Add(item);
+                        int k = 0;
+                        while (sqlReader.Read())
+                        {
+                            if (sqlReader[2] == null) continue;
+                            string tname = (String.Format("{0}", sqlReader[0]));
+                            string fname = (String.Format("{0}", sqlReader[1]));
+                            string type = (String.Format("{0}", sqlReader[2]));
+
+                            item.ds.AddTableField(tname, fname, type);
+                           // comboTablesList.Items.Add(item);
+
+
+                        }
+
+                    }
 
 
                 }
+            }
+            if (currentManager != null)
+            {
+                foreach (var v in currentManager.ds.Tables)
+                {
+                    comboTablesList.Items.Add(v);
+                }
 
             }
+            
             
         }
 
@@ -561,21 +577,21 @@ namespace TARGITD3FOConnection
             }
         }
 
-        public  void ExecuteSQL()
+        public  void ExecuteSQL(D3FOConnectionManager cm)
         {
 
             try
             {
                 MessageBox.Show("DBeeeeeee");
 
-                cm = new D3FOConnectionManager();
+              //  cm = new D3FOConnectionManager();
                 cm.AcquireConnection(null);
                 sqlConn = cm.GetDbConnection();
                 //  DbConnection sqlConn = (DbConnection)connection;
                 sqlConn.Open();
                 DbCommand cmd = sqlConn.CreateCommand();
                 MessageBox.Show("DBBBBBBB!");
-                cmd.CommandText = "SELECT * FROM [sys].tables";
+                cmd.CommandText = "SELECT * FROM [sys].columns";
                 cmd.CommandType = System.Data.CommandType.Text;
                 MessageBox.Show("DBBBBBBB2222!");
                 sqlReader = cmd.ExecuteReader();

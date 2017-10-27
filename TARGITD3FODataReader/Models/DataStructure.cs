@@ -31,6 +31,21 @@ namespace TARGITD3FODataReader.Models
             }
             else return null;
         }
+
+        public void AddTableField(string TableName, string FieldName, string FieldType)
+        {
+            TableItem ti = _tables.Find(x => x.Name.Contains(TableName));
+            if(ti != null)
+            {
+                ti.Fields.Add(new FieldItem() { Name = FieldName, Type = FieldType });
+            }
+            else
+            {
+                ti = new TableItem() { Name = TableName };
+                ti.Fields.Add(new FieldItem() { Name = FieldName, Type = FieldType });
+                _tables.Add(ti);
+            }
+        }
     }
     ////
     public class FieldItem
@@ -60,8 +75,8 @@ namespace TARGITD3FODataReader.Models
     ///
     public class TableItem
     {
-        private string _id; // String.Empty;
-        public string ID
+        private int _id; // String.Empty;
+        public int ID
         {
             get { return this._id; }
             set { this._id = value; }
@@ -77,6 +92,12 @@ namespace TARGITD3FODataReader.Models
         
         public List<FieldItem> Fields { get { return _fields; } }
         public TableItem() { }
+
+        public TableItem(string n, int i = 0)
+        {
+            _name = n;
+            _id = i;
+        }
 
         public override string ToString()
         {
