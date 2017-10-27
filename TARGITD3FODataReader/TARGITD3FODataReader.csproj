@@ -58,6 +58,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\D3FOConnectionManagerUI\Assemblies\Microsoft.SqlServer.PipelineHost.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.SqlServer.TransactSql.ScriptDom, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\D3FOConnectionManagerUI\Assemblies\Microsoft.SqlServer.TransactSql.ScriptDom.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -81,6 +85,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SqlParser.cs" />
+    <Compile Include="TableContent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TableContent.Designer.cs">
+      <DependentUpon>TableContent.cs</DependentUpon>
     </Compile>
     <Compile Include="TARGITD3FODataReaderEditor.cs">
       <SubType>Form</SubType>
@@ -106,11 +117,15 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="TableContent.resx">
+      <DependentUpon>TableContent.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TARGITD3FODataReaderEditor.resx">
       <DependentUpon>TARGITD3FODataReaderEditor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\DataSources\TARGITD3FOConnection.D3FOConnectionManagerEditor.datasource" />
     <None Include="Resources\Icon1.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

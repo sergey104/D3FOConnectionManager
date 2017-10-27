@@ -2,6 +2,7 @@
 using Microsoft.SqlServer.Dts.Runtime;
 using Microsoft.SqlServer.Dts.Runtime.Design;
 using System;
+using System.Data;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Data.Common;
@@ -76,20 +77,18 @@ namespace TARGITD3FOConnection
             this.serviceProvider = serviceProvider;
             this.connectionService = (IDtsConnectionService)serviceProvider.GetService(typeof(IDtsConnectionService));
             this.designTimeInstance = metaData.Instantiate();
+           
         }
 
         public TARGITD3FODataReaderEditor()
         {
+            
 
-           
 
         }
 
         private void InitializeComponent()
         {
-#if DEBUG
-Debugger.Launch();
-#endif
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabConnectionManagerPage = new System.Windows.Forms.TabPage();
@@ -330,6 +329,7 @@ Debugger.Launch();
             this.comboConnection.Name = "comboConnection";
             this.comboConnection.Size = new System.Drawing.Size(452, 21);
             this.comboConnection.TabIndex = 2;
+            this.comboConnection.SelectedIndexChanged += new System.EventHandler(this.comboConnection_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -478,13 +478,14 @@ Debugger.Launch();
                     currentManager = item;
                     connectionlist.Add(item);
                     comboConnection.Items.Add(item);
-
+                    comboConnection.SelectedIndex = 0;
                     if (connections[i].ID.Equals(connectionManagerId))
                     {
                         comboConnection.SelectedIndex = i;
                         cm = conn;
                         currentManager = item;
                     }
+                    
                 }
             }
             if(connectionlist.Count > 0)
@@ -503,13 +504,13 @@ Debugger.Launch();
                             string type = (String.Format("{0}", sqlReader[2]));
 
                             item.ds.AddTableField(tname, fname, type);
-                           // comboTablesList.Items.Add(item);
-
+                            // comboTablesList.Items.Add(item);
+                           
 
                         }
 
                     }
-
+                  
 
                 }
             }
@@ -518,13 +519,25 @@ Debugger.Launch();
                 foreach (var v in currentManager.ds.Tables)
                 {
                     comboTablesList.Items.Add(v);
+
+                }
+                comboTablesList.SelectedIndex = 0;
+            }
+
+           
+        }
+        private void UpdateConnectionTab()
+        {
+            if (currentManager != null)
+            {
+                foreach (var v in currentManager.ds.Tables)
+                {
+                    comboTablesList.Items.Add(v);
+
                 }
 
             }
-            
-            
         }
-
         private void button1_Click(object sender, EventArgs e)
         {
             System.Collections.ArrayList created = connectionService.CreateConnection("TARGITD3FOConnection");
@@ -595,16 +608,57 @@ Debugger.Launch();
                 cmd.CommandType = System.Data.CommandType.Text;
                 MessageBox.Show("DBBBBBBB2222!");
                 sqlReader = cmd.ExecuteReader();
+                
+
+
             }
             catch (Exception)
             {
                
                 throw;
             }
+           
+        }
+        //////
+        public void ExecuteSQL1(D3FOConnectionManager cm)
+        {
+
+            try
+            {
+                MessageBox.Show("DBeeeeeee");
+
+                //  cm = new D3FOConnectionManager();
+                cm.AcquireConnection(null);
+                sqlConn = cm.GetDbConnection();
+                //  DbConnection sqlConn = (DbConnection)connection;
+                sqlConn.Open();
+                DbCommand cmd = sqlConn.CreateCommand();
+                MessageBox.Show("DBBBBBBB!");
+                cmd.CommandText = "SELECT * FROM CountryCodes";
+                cmd.CommandType = System.Data.CommandType.Text;
+                MessageBox.Show("DBBBBBBB2222!");
+                sqlReader = cmd.ExecuteReader();
+                DataTable dt = new DataTable();
+                DbDataReader dd =  dt.CreateDataReader();
+                dd = sqlReader;
+                dt.Load(dd);
 
 
+            }
+            catch (Exception)
+            {
 
+                throw;
+            }
+
+        }
+
+        private void comboConnection_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int j = comboConnection.SelectedIndex;
+            currentManager = connectionlist[j];
             
+            UpdateConnectionTab();
         }
     }
 
