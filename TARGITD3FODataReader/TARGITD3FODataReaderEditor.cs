@@ -5,6 +5,7 @@ using System;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Data.Common;
+using TARGITD3FODataReader.Models;
 
 namespace TARGITD3FOConnection
 {
@@ -58,6 +59,8 @@ namespace TARGITD3FOConnection
             public string Name { get; set; }
             public TARGITD3FOConnection.D3FOConnectionManager ConnManager { get; set; }
 
+            public DataStructure ds;
+
             public override string ToString()
             {
                 return Name;
@@ -86,7 +89,7 @@ namespace TARGITD3FOConnection
         public TARGITD3FODataReaderEditor()
         {
 
-
+           
 
         }
 
