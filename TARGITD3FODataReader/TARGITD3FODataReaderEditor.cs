@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Data.Common;
 using TARGITD3FODataReader.Models;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 
 namespace TARGITD3FOConnection
 {
@@ -55,6 +56,7 @@ namespace TARGITD3FOConnection
         public IDTSOutput100 output;
         public DbConnection sqlConn;
         private ConnectionManagerItem currentManager = new ConnectionManagerItem();
+        private DataGridView dataGridView;
 
         private class ConnectionManagerItem
         {
@@ -95,6 +97,7 @@ namespace TARGITD3FOConnection
             this.buttonPreview = new System.Windows.Forms.Button();
             this.tabAccessMode = new System.Windows.Forms.TabControl();
             this.tabTables = new System.Windows.Forms.TabPage();
+            this.dataGridView = new System.Windows.Forms.DataGridView();
             this.comboTablesList = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.tabSQL = new System.Windows.Forms.TabPage();
@@ -122,6 +125,7 @@ namespace TARGITD3FOConnection
             this.tabConnectionManagerPage.SuspendLayout();
             this.tabAccessMode.SuspendLayout();
             this.tabTables.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.tabSQL.SuspendLayout();
             this.tabColumnsPage.SuspendLayout();
             this.tabErrorOutputPage.SuspendLayout();
@@ -179,6 +183,7 @@ namespace TARGITD3FOConnection
             this.buttonPreview.TabIndex = 7;
             this.buttonPreview.Text = "Preview";
             this.buttonPreview.UseVisualStyleBackColor = true;
+            this.buttonPreview.Click += new System.EventHandler(this.buttonPreview_Click);
             // 
             // tabAccessMode
             // 
@@ -194,6 +199,7 @@ namespace TARGITD3FOConnection
             // 
             this.tabTables.BackColor = System.Drawing.Color.WhiteSmoke;
             this.tabTables.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tabTables.Controls.Add(this.dataGridView);
             this.tabTables.Controls.Add(this.comboTablesList);
             this.tabTables.Controls.Add(this.label4);
             this.tabTables.Location = new System.Drawing.Point(4, 22);
@@ -202,6 +208,14 @@ namespace TARGITD3FOConnection
             this.tabTables.Size = new System.Drawing.Size(611, 204);
             this.tabTables.TabIndex = 0;
             this.tabTables.Text = "Table";
+            // 
+            // dataGridView
+            // 
+            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.Location = new System.Drawing.Point(57, 75);
+            this.dataGridView.Name = "dataGridView";
+            this.dataGridView.Size = new System.Drawing.Size(172, 111);
+            this.dataGridView.TabIndex = 5;
             // 
             // comboTablesList
             // 
@@ -244,6 +258,7 @@ namespace TARGITD3FOConnection
             this.button5.TabIndex = 5;
             this.button5.Text = "Parse Query";
             this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // button4
             // 
@@ -365,16 +380,16 @@ namespace TARGITD3FOConnection
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.White;
-            this.panel2.Location = new System.Drawing.Point(7, 225);
+            this.panel2.Location = new System.Drawing.Point(7, 329);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(627, 200);
+            this.panel2.Size = new System.Drawing.Size(627, 96);
             this.panel2.TabIndex = 1;
             // 
             // panel1
             // 
             this.panel1.Location = new System.Drawing.Point(7, 19);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(627, 186);
+            this.panel1.Size = new System.Drawing.Size(627, 294);
             this.panel1.TabIndex = 0;
             // 
             // tabErrorOutputPage
@@ -439,6 +454,7 @@ namespace TARGITD3FOConnection
             this.tabAccessMode.ResumeLayout(false);
             this.tabTables.ResumeLayout(false);
             this.tabTables.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.tabSQL.ResumeLayout(false);
             this.tabSQL.PerformLayout();
             this.tabColumnsPage.ResumeLayout(false);
@@ -479,6 +495,7 @@ namespace TARGITD3FOConnection
                     connectionlist.Add(item);
                     comboConnection.Items.Add(item);
                     comboConnection.SelectedIndex = 0;
+                    cm = conn;
                     if (connections[i].ID.Equals(connectionManagerId))
                     {
                         comboConnection.SelectedIndex = i;
@@ -522,6 +539,7 @@ namespace TARGITD3FOConnection
 
                 }
                 comboTablesList.SelectedIndex = 0;
+                comboMode.SelectedIndex = 0;
             }
 
            
@@ -607,7 +625,7 @@ namespace TARGITD3FOConnection
                 cmd.CommandText = "SELECT * FROM [sys].columns";
                 cmd.CommandType = System.Data.CommandType.Text;
                 MessageBox.Show("DBBBBBBB2222!");
-                sqlReader = cmd.ExecuteReader();
+                sqlReader = cmd.ExecuteReader();  
                 
 
 
@@ -620,7 +638,7 @@ namespace TARGITD3FOConnection
            
         }
         //////
-        public void ExecuteSQL1(D3FOConnectionManager cm)
+        public void ExecuteSQL1()
         {
 
             try
@@ -634,15 +652,20 @@ namespace TARGITD3FOConnection
                 sqlConn.Open();
                 DbCommand cmd = sqlConn.CreateCommand();
                 MessageBox.Show("DBBBBBBB!");
-                cmd.CommandText = "SELECT * FROM CountryCodes";
+                cmd.CommandText = "SELECT * FROM [sys].columns";
                 cmd.CommandType = System.Data.CommandType.Text;
                 MessageBox.Show("DBBBBBBB2222!");
-                sqlReader = cmd.ExecuteReader();
-                DataTable dt = new DataTable();
-                DbDataReader dd =  dt.CreateDataReader();
-                dd = sqlReader;
-                dt.Load(dd);
+                var sqlReader1 = cmd.ExecuteReader();
+                MessageBox.Show("DBBBBBBB2222!");
+                               
+                                var dt = new DataTable("CountryCodes");
+                               dt.Load(sqlReader1);
+                            //    dataGridView.AutoGenerateColumns = true;
+                            //    dataGridView.DataSource = dt;
+                
+               
 
+               
 
             }
             catch (Exception)
@@ -660,6 +683,23 @@ namespace TARGITD3FOConnection
             
             UpdateConnectionTab();
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            SqlParser sp = new SqlParser();
+            List<string> s = sp.Parse("select * from table");
+            if (sp == null) MessageBox.Show("OK");
+            MessageBox.Show(s.ToString());
+        }
+
+        private void buttonPreview_Click(object sender, EventArgs e)
+        {
+
+            ExecuteSQL1();
+        }
+
+        ///////////////
+        
     }
 
 
