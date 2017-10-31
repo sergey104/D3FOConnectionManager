@@ -9,6 +9,7 @@ using System.Data.Common;
 using TARGITD3FODataReader.Models;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Windows;
 
 namespace TARGITD3FOConnection
 {
@@ -34,7 +35,6 @@ namespace TARGITD3FOConnection
         private Label label5;
         private Button button5;
         private Button button4;
-        private Button button3;
         private Button button2;
         private Panel panel2;
         private Panel panel1;
@@ -56,7 +56,6 @@ namespace TARGITD3FOConnection
         public IDTSOutput100 output;
         public DbConnection sqlConn;
         private ConnectionManagerItem currentManager = new ConnectionManagerItem();
-        private DataGridView dataGridView;
 
         private class ConnectionManagerItem
         {
@@ -97,13 +96,11 @@ namespace TARGITD3FOConnection
             this.buttonPreview = new System.Windows.Forms.Button();
             this.tabAccessMode = new System.Windows.Forms.TabControl();
             this.tabTables = new System.Windows.Forms.TabPage();
-            this.dataGridView = new System.Windows.Forms.DataGridView();
             this.comboTablesList = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.tabSQL = new System.Windows.Forms.TabPage();
             this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -125,7 +122,6 @@ namespace TARGITD3FOConnection
             this.tabConnectionManagerPage.SuspendLayout();
             this.tabAccessMode.SuspendLayout();
             this.tabTables.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.tabSQL.SuspendLayout();
             this.tabColumnsPage.SuspendLayout();
             this.tabErrorOutputPage.SuspendLayout();
@@ -199,7 +195,6 @@ namespace TARGITD3FOConnection
             // 
             this.tabTables.BackColor = System.Drawing.Color.WhiteSmoke;
             this.tabTables.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tabTables.Controls.Add(this.dataGridView);
             this.tabTables.Controls.Add(this.comboTablesList);
             this.tabTables.Controls.Add(this.label4);
             this.tabTables.Location = new System.Drawing.Point(4, 22);
@@ -208,14 +203,6 @@ namespace TARGITD3FOConnection
             this.tabTables.Size = new System.Drawing.Size(611, 204);
             this.tabTables.TabIndex = 0;
             this.tabTables.Text = "Table";
-            // 
-            // dataGridView
-            // 
-            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView.Location = new System.Drawing.Point(57, 75);
-            this.dataGridView.Name = "dataGridView";
-            this.dataGridView.Size = new System.Drawing.Size(172, 111);
-            this.dataGridView.TabIndex = 5;
             // 
             // comboTablesList
             // 
@@ -239,7 +226,6 @@ namespace TARGITD3FOConnection
             this.tabSQL.BackColor = System.Drawing.Color.WhiteSmoke;
             this.tabSQL.Controls.Add(this.button5);
             this.tabSQL.Controls.Add(this.button4);
-            this.tabSQL.Controls.Add(this.button3);
             this.tabSQL.Controls.Add(this.button2);
             this.tabSQL.Controls.Add(this.richTextBox1);
             this.tabSQL.Controls.Add(this.label5);
@@ -252,7 +238,7 @@ namespace TARGITD3FOConnection
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(483, 156);
+            this.button5.Location = new System.Drawing.Point(483, 112);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(104, 23);
             this.button5.TabIndex = 5;
@@ -262,21 +248,13 @@ namespace TARGITD3FOConnection
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(483, 115);
+            this.button4.Location = new System.Drawing.Point(483, 72);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(104, 23);
             this.button4.TabIndex = 4;
             this.button4.Text = "Browse...";
             this.button4.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(483, 74);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(104, 23);
-            this.button3.TabIndex = 3;
-            this.button3.Text = "Query Builder";
-            this.button3.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // button2
             // 
@@ -428,6 +406,7 @@ namespace TARGITD3FOConnection
             this.buttonCancel.TabIndex = 3;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // buttonHelp
             // 
@@ -454,7 +433,6 @@ namespace TARGITD3FOConnection
             this.tabAccessMode.ResumeLayout(false);
             this.tabTables.ResumeLayout(false);
             this.tabTables.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.tabSQL.ResumeLayout(false);
             this.tabSQL.PerformLayout();
             this.tabColumnsPage.ResumeLayout(false);
@@ -466,9 +444,6 @@ namespace TARGITD3FOConnection
         private void TARGITD3FODataReaderEditor_Load(object sender, EventArgs e)
         {
             var connections = connectionService.GetConnections();
-
-         //   var queueName = metaData.CustomPropertyCollection[0];
-       //   comboMode.Text = queueName.Value;
 
             string connectionManagerId = string.Empty;
 
@@ -577,11 +552,21 @@ namespace TARGITD3FOConnection
         {
             switch(listBox1.SelectedIndex)
             {
-                case 0: tabControl1.SelectedIndex = 0;
+                case 0:
+                    {
+
+                        tabControl1.SelectedIndex = 0;
+                    }
                     break;
-                case 1: tabControl1.SelectedIndex = 1;
+                case 1:
+                    {
+                        tabControl1.SelectedIndex = 1;
+                    }
                     break;
-                case 2: tabControl1.SelectedIndex = 2;
+                case 2:
+                    {
+                        tabControl1.SelectedIndex = 2;
+                    }
                     break;
                 default: tabControl1.SelectedIndex = 0;
                     break;
@@ -595,12 +580,40 @@ namespace TARGITD3FOConnection
             switch (comboMode.SelectedIndex)
             {
                 case 0:
-                    tabAccessMode.SelectedIndex = 0;
-                    break;
+                    {
+                        comboTablesList.Items.Clear();
+                        foreach (var v in currentManager.ds.Tables)
+                        {
+                            comboTablesList.Items.Add(v);
+
+                        }
+                        comboTablesList.SelectedIndex = 0;
+                        comboMode.SelectedIndex = 0;
+                        tabAccessMode.SelectedIndex = 0;
+                        break;
+                    }
                 case 1:
-                    tabAccessMode.SelectedIndex = 1;
-                    break;
+                    {
+                        comboTablesList.Items.Clear();
+                        foreach (var v in currentManager.ds.Tables)
+                        {
+                            comboTablesList.Items.Add(v);
+
+                        }
+                        comboTablesList.SelectedIndex = 0;
+                        comboMode.SelectedIndex = 1;
+                        tabAccessMode.SelectedIndex = 1;
+                        break;
+                    }
                 default:
+                    comboTablesList.Items.Clear();
+                    foreach (var v in currentManager.ds.Tables)
+                    {
+                        comboTablesList.Items.Add(v);
+
+                    }
+                    comboTablesList.SelectedIndex = 0;
+                    comboMode.SelectedIndex = 0;
                     tabAccessMode.SelectedIndex = 0;
                     break;
 
@@ -643,26 +656,33 @@ namespace TARGITD3FOConnection
 
             try
             {
-                MessageBox.Show("DBeeeeeee");
-
                 //  cm = new D3FOConnectionManager();
                 cm.AcquireConnection(null);
                 sqlConn = cm.GetDbConnection();
                 //  DbConnection sqlConn = (DbConnection)connection;
                 sqlConn.Open();
                 DbCommand cmd = sqlConn.CreateCommand();
-                MessageBox.Show("DBBBBBBB!");
-                cmd.CommandText = "SELECT * FROM CountryCodes";
-                cmd.CommandType = System.Data.CommandType.Text;
-                MessageBox.Show("DBBBBBBB2222!");
+                if (comboMode.SelectedIndex == 0)
+                {
+                    string s = this.comboTablesList.SelectedItem.ToString();
+                    cmd.CommandText = "SELECT * FROM " + s;
+                    cmd.CommandType = System.Data.CommandType.Text;
+                }
+                else
+                {
+                    string s = richTextBox1.Text;
+                    cmd.CommandText = s;
+                    cmd.CommandType = System.Data.CommandType.Text;
+                }
                 var sqlReader1 = cmd.ExecuteReader();
                 MessageBox.Show("DBBBBBBB2222!");
                                
                                 var dt = new DataTable();
                 DataReaderParser dp = new DataReaderParser(sqlReader1);
                 dt = dp.ConvertDataReaderToTableManually();
-                                dataGridView.AutoGenerateColumns = true;
-                                dataGridView.DataSource = dt;
+                               TableContent t = new TableContent();
+                t.BuildContent(dt);
+                t.Show();
                 
                
 
@@ -685,12 +705,39 @@ namespace TARGITD3FOConnection
             UpdateConnectionTab();
         }
 
-        private void button5_Click(object sender, EventArgs e)
+
+
+               private void button5_Click(object sender, EventArgs e)
         {
-            SqlParser sp = new SqlParser();
-            List<string> s = sp.Parse("select * from table");
-            if (sp == null) MessageBox.Show("OK");
-            MessageBox.Show(s.ToString());
+         
+
+                try
+                {
+                    //  cm = new D3FOConnectionManager();
+                    cm.AcquireConnection(null);
+                    sqlConn = cm.GetDbConnection();
+                    //  DbConnection sqlConn = (DbConnection)connection;
+                    sqlConn.Open();
+                    DbCommand cmd = sqlConn.CreateCommand();
+
+                string s = richTextBox1.Text;
+
+                cmd.CommandText =  s;
+                    cmd.CommandType = System.Data.CommandType.Text;
+
+                    var sqlReader1 = cmd.ExecuteReader();
+                    MessageBox.Show("SQL query statment OK!");
+                
+
+                }
+                catch (Exception exp)
+                {
+
+                MessageBox.Show("Error!" + exp.ToString());
+               
+                }
+
+           
         }
 
         private void buttonPreview_Click(object sender, EventArgs e)
@@ -699,8 +746,27 @@ namespace TARGITD3FOConnection
             ExecuteSQL1();
         }
 
+        private void buttonCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                System.IO.StreamReader sr = new
+                   System.IO.StreamReader(openFileDialog1.FileName);
+                richTextBox1.Clear();
+                richTextBox1.Text = sr.ReadToEnd();
+                //MessageBox.Show(sr.ReadToEnd());
+                sr.Close();
+            }
+        }
+
         ///////////////
-        
+
     }
 
 
