@@ -652,16 +652,17 @@ namespace TARGITD3FOConnection
                 sqlConn.Open();
                 DbCommand cmd = sqlConn.CreateCommand();
                 MessageBox.Show("DBBBBBBB!");
-                cmd.CommandText = "SELECT * FROM [sys].columns";
+                cmd.CommandText = "SELECT * FROM CountryCodes";
                 cmd.CommandType = System.Data.CommandType.Text;
                 MessageBox.Show("DBBBBBBB2222!");
                 var sqlReader1 = cmd.ExecuteReader();
                 MessageBox.Show("DBBBBBBB2222!");
                                
-                                var dt = new DataTable("CountryCodes");
-                               dt.Load(sqlReader1);
-                            //    dataGridView.AutoGenerateColumns = true;
-                            //    dataGridView.DataSource = dt;
+                                var dt = new DataTable();
+                DataReaderParser dp = new DataReaderParser(sqlReader1);
+                dt = dp.ConvertDataReaderToTableManually();
+                                dataGridView.AutoGenerateColumns = true;
+                                dataGridView.DataSource = dt;
                 
                
 
