@@ -21,17 +21,20 @@ namespace TARGITD3FOConnection
     {
         private DbDataReader sqlReader;
         public D3FOConnectionManager cm;
-        public IDTSCustomProperty100 queueName;
+      
         public IDTSRuntimeConnection100 connection;
         public IDTSOutput100 output;
         public DbConnection sqlConn;
         
+        private string queueName;
+
         public TARGITD3FODataReader()
         {
             cm = new D3FOConnectionManager();
             cm.AcquireConnection(null);
             sqlConn = cm.GetDbConnection();
             
+
         }
 
         public override void ProvideComponentProperties()
@@ -42,10 +45,10 @@ namespace TARGITD3FOConnection
             output = ComponentMetaData.OutputCollection.New();
             output.Name = "DataOutput";
 
-            queueName = ComponentMetaData.CustomPropertyCollection.New();
+            IDTSCustomProperty100 queueName = ComponentMetaData.CustomPropertyCollection.New();
             queueName.Name = "QueueName";
             queueName.Description = "The name of the queue to read messages from";
-
+            queueName.Value = String.Empty;
             
 
             connection = ComponentMetaData.RuntimeConnectionCollection.New();
@@ -68,9 +71,12 @@ namespace TARGITD3FOConnection
                
                 if (this.cm == null)
                     throw new Exception("Couldn't get the cm connection manager, ");
-
-          //      this.queueName = ComponentMetaData.CustomPropertyCollection["QueueName"].Value;
+                
+                this.queueName = ComponentMetaData.CustomPropertyCollection["QueueName"].Value.ToString();
+                
+               
                 connection = this.cm.AcquireConnection(transaction) as IDTSRuntimeConnection100;
+                
             }
 
         }
@@ -102,22 +108,18 @@ namespace TARGITD3FOConnection
         public override void PreExecute()
         {
             
-               try
+            try
                 {
-                MessageBox.Show("DBBBBBBB111111111111111111!");
-
-
-
-                //  DbConnection sqlConn = (DbConnection)connection;
                 sqlConn.Open();
                 DbCommand cmd = sqlConn.CreateCommand();
-                MessageBox.Show("DBBBBBBB!");
+              
                 cmd.CommandText = "SELECT * FROM CountryCodes";
                 cmd.CommandType = System.Data.CommandType.Text;
-                MessageBox.Show("DBBBBBBB2222!");
+                MessageBox.Show("PreExecute" + ComponentMetaData.CustomPropertyCollection["QueueName"].Value.ToString());
+               
                 sqlReader = cmd.ExecuteReader();
-            }
-                catch (Exception)
+           }
+               catch (Exception)
                 {
                     ReleaseConnections();
                     throw;

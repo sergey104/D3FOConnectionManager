@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Reflection;
 using System.Data;
 using System.Windows.Forms;
 
@@ -46,7 +43,7 @@ namespace TARGITD3FOConnection
                     foreach (DataRow drow in dtSchema.Rows)
                     {
                         string columnName = System.Convert.ToString(drow["ColumnName"]);
-                        //  DataColumn column = new DataColumn(columnName, (Type)(drow["DataType"]));
+                     //     DataColumn column = new DataColumn(columnName, (Type)(drow["DataType"]));
                         DataColumn column = new DataColumn(columnName);
                         column.Unique = false; // (bool)drow["IsUnique"];
                         column.AllowDBNull = true; // (bool)drow["AllowDBNull"];

@@ -397,6 +397,7 @@ namespace TARGITD3FOConnection
             this.buttonOK.TabIndex = 2;
             this.buttonOK.Text = "OK";
             this.buttonOK.UseVisualStyleBackColor = true;
+            this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 
             // buttonCancel
             // 
@@ -626,7 +627,7 @@ namespace TARGITD3FOConnection
 
             try
             {
-                MessageBox.Show("DBeeeeeee");
+               
 
               //  cm = new D3FOConnectionManager();
                 cm.AcquireConnection(null);
@@ -634,10 +635,10 @@ namespace TARGITD3FOConnection
                 //  DbConnection sqlConn = (DbConnection)connection;
                 sqlConn.Open();
                 DbCommand cmd = sqlConn.CreateCommand();
-                MessageBox.Show("DBBBBBBB!");
+                
                 cmd.CommandText = "SELECT * FROM [sys].columns";
                 cmd.CommandType = System.Data.CommandType.Text;
-                MessageBox.Show("DBBBBBBB2222!");
+              
                 sqlReader = cmd.ExecuteReader();  
                 
 
@@ -675,7 +676,7 @@ namespace TARGITD3FOConnection
                     cmd.CommandType = System.Data.CommandType.Text;
                 }
                 var sqlReader1 = cmd.ExecuteReader();
-                MessageBox.Show("DBBBBBBB2222!");
+                
                                
                                 var dt = new DataTable();
                 DataReaderParser dp = new DataReaderParser(sqlReader1);
@@ -763,6 +764,18 @@ namespace TARGITD3FOConnection
                 //MessageBox.Show(sr.ReadToEnd());
                 sr.Close();
             }
+        }
+
+        private void buttonOK_Click(object sender, EventArgs e)
+        {
+            if (comboConnection.SelectedItem != null)
+            {
+                var item = (ConnectionManagerItem)comboConnection.SelectedItem;
+                this.metaData.RuntimeConnectionCollection[0].ConnectionManagerID = item.ID;
+            }
+            designTimeInstance.SetComponentProperty("QueueName", "Place for SQL query");
+            this.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.Close();
         }
 
         ///////////////
