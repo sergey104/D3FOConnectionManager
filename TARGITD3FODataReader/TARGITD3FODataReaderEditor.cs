@@ -56,11 +56,13 @@ namespace TARGITD3FOConnection
         public IDTSOutput100 output;
         public DbConnection sqlConn;
         private ConnectionManagerItem currentManager = new ConnectionManagerItem();
+        public string SQLString { get; set; }
 
         private class ConnectionManagerItem
         {
             public string ID;
             public string Name { get; set; }
+           
             public TARGITD3FOConnection.D3FOConnectionManager ConnManager { get; set; }
 
             public DataStructure ds = new DataStructure();
@@ -211,6 +213,7 @@ namespace TARGITD3FOConnection
             this.comboTablesList.Name = "comboTablesList";
             this.comboTablesList.Size = new System.Drawing.Size(403, 21);
             this.comboTablesList.TabIndex = 1;
+            this.comboTablesList.SelectedIndexChanged += new System.EventHandler(this.comboTablesList_SelectedIndexChanged);
             // 
             // label4
             // 
@@ -273,6 +276,7 @@ namespace TARGITD3FOConnection
             this.richTextBox1.Size = new System.Drawing.Size(435, 147);
             this.richTextBox1.TabIndex = 1;
             this.richTextBox1.Text = "";
+            this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
             // 
             // label5
             // 
@@ -585,6 +589,7 @@ namespace TARGITD3FOConnection
                 case 0:
                     {
                         comboTablesList.Items.Clear();
+                        this.SQLString = String.Empty;
                         foreach (var v in currentManager.ds.Tables)
                         {
                             comboTablesList.Items.Add(v);
@@ -598,6 +603,7 @@ namespace TARGITD3FOConnection
                 case 1:
                     {
                         comboTablesList.Items.Clear();
+                        this.SQLString = String.Empty;
                         foreach (var v in currentManager.ds.Tables)
                         {
                             comboTablesList.Items.Add(v);
@@ -706,6 +712,7 @@ namespace TARGITD3FOConnection
             currentManager = connectionlist[j];
             
             UpdateConnectionTab();
+            this.SQLString = String.Empty;
         }
 
 
@@ -775,9 +782,23 @@ namespace TARGITD3FOConnection
                 var item = (ConnectionManagerItem)comboConnection.SelectedItem;
                 this.metaData.RuntimeConnectionCollection[0].ConnectionManagerID = item.ID;
             }
+            if(String.IsNullOrEmpty(this.SQLString))
             designTimeInstance.SetComponentProperty("QueueName", "Place for SQL query");
+            else designTimeInstance.SetComponentProperty("QueueName", this.SQLString);
             this.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.Close();
+        }
+
+        private void comboTablesList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string s = this.comboTablesList.SelectedItem.ToString();
+            this.SQLString = "SELECT * FROM " + s;
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            string s = this.comboTablesList.SelectedItem.ToString();
+            this.SQLString = richTextBox1.Text.ToString();
         }
 
         ///////////////
