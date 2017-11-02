@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Data.SqlClient;
 using System.Data.Common;
+using System.Diagnostics;
 
 namespace TARGITD3FOConnection
 {
@@ -30,6 +31,8 @@ namespace TARGITD3FOConnection
 
         public TARGITD3FODataReader()
         {
+
+
             cm = new D3FOConnectionManager();
             cm.AcquireConnection(null);
             sqlConn = cm.GetDbConnection();
@@ -55,10 +58,10 @@ namespace TARGITD3FOConnection
             connection.Name = "TARGITD3FOConnection";
             connection.ConnectionManagerID = "TARGITDataSource";
 
-            
 
+            MessageBox.Show("prop");
 
-            CreateColumns();
+            //CreateColumns();
         }
         public override void AcquireConnections(object transaction)
         {
@@ -112,9 +115,10 @@ namespace TARGITD3FOConnection
                 {
                 sqlConn.Open();
                 DbCommand cmd = sqlConn.CreateCommand();
-              
-                cmd.CommandText = "SELECT * FROM CountryCodes";
-                cmd.CommandType = System.Data.CommandType.Text;
+
+                //    cmd.CommandText = "SELECT * FROM CountryCodes";
+                cmd.CommandText = ComponentMetaData.CustomPropertyCollection["QueueName"].Value.ToString();
+                    cmd.CommandType = System.Data.CommandType.Text;
                 MessageBox.Show("PreExecute" + ComponentMetaData.CustomPropertyCollection["QueueName"].Value.ToString());
                
                 sqlReader = cmd.ExecuteReader();
@@ -128,30 +132,116 @@ namespace TARGITD3FOConnection
 
             
             base.PreExecute();
+            
         }
 
-        private void CreateColumns()
+        private void AddOutputColumns(String propertyValue)
         {
-             
+            MessageBox.Show("CreateColumns");
 
-             output.OutputColumnCollection.RemoveAll();
-             output.ExternalMetadataColumnCollection.RemoveAll();
+            output.OutputColumnCollection.RemoveAll();
+            output.ExternalMetadataColumnCollection.RemoveAll();
 
-             IDTSOutputColumn100 column1 = output.OutputColumnCollection.New();
-             IDTSExternalMetadataColumn100 exColumn1 = output.ExternalMetadataColumnCollection.New();
-             IDTSOutputColumn100 column2 = output.OutputColumnCollection.New();
-             IDTSExternalMetadataColumn100 exColumn2 = output.ExternalMetadataColumnCollection.New();
+            /*
+                          IDTSOutputColumn100 column1 = output.OutputColumnCollection.New();
+                          IDTSExternalMetadataColumn100 exColumn1 = output.ExternalMetadataColumnCollection.New();
+                          IDTSOutputColumn100 column2 = output.OutputColumnCollection.New();
+                          IDTSExternalMetadataColumn100 exColumn2 = output.ExternalMetadataColumnCollection.New();
 
+                          column1.Name = "Country";
+                          column1.SetDataTypeProperties(DataType.DT_WSTR, 4000, 0, 0, 0);
+                          exColumn1.Name = "Country";
+                          column2.Name = "Code";
+                          column2.SetDataTypeProperties(DataType.DT_WSTR, 4000, 0, 0, 0);
+             exColumn1.Name = "Code"; */
+            sqlConn.Open();
+            DbCommand cmd = sqlConn.CreateCommand();
 
+            //    cmd.CommandText = "SELECT * FROM CountryCodes";
+            cmd.CommandText = ComponentMetaData.CustomPropertyCollection["QueueName"].Value.ToString();
+            cmd.CommandType = System.Data.CommandType.Text;
+            MessageBox.Show("Execute in Col" + ComponentMetaData.CustomPropertyCollection["QueueName"].Value.ToString());
 
-             column1.Name = "Country";
-             column1.SetDataTypeProperties(DataType.DT_WSTR, 4000, 0, 0, 0);
-             exColumn1.Name = "Country";
+            sqlReader = cmd.ExecuteReader();
+            MessageBox.Show("Executed in Col Done" );
+            if (sqlReader != null)
+            {
+#if DEBUG
+                Debugger.Launch();
+#endif
 
-            column2.Name = "Code";
-            column2.SetDataTypeProperties(DataType.DT_WSTR, 4000, 0, 0, 0);
-            exColumn2.Name = "Code";
+                DataTable dt = new DataTable();
+                DataTable dtSchema = sqlReader.GetSchemaTable();
+                foreach (DataRow row in dtSchema.Rows)
+                {
+                    IDTSOutputColumn100 outputCol = ComponentMetaData.OutputCollection[0].OutputColumnCollection.New();
+                    MessageBox.Show("Parsing");
+                    bool isLong = false;
+        /*            DataType dType = DataRecordTypeToBufferType((Type)row["DataType"]);
+                    dType = ConvertBufferDataTypeToFitManaged(dType, ref isLong);
+                    int length = ((int)row["ColumnSize"]) == -1 ? 1000 : (int)row["ColumnSize"];
+                    int precision = row["NumericPrecision"] is System.DBNull ? 0 : (short)row["NumericPrecision"];
+                    int scale = row["NumericScale"] is System.DBNull ? 0 : (short)row["NumericScale"];
+                    int codePage = dtSchema.Locale.TextInfo.ANSICodePage;
 
+                    switch (dType)
+                    {
+                        case DataType.DT_STR:
+                        case DataType.DT_TEXT:
+                            precision = 0;
+                            scale = 0;
+                            break;
+                        case DataType.DT_NUMERIC:
+                            length = 0;
+                            codePage = 0;
+                            if (precision > 38)
+                                precision = 38;
+                            if (scale > precision)
+                                scale = precision;
+                            break;
+                        case DataType.DT_DECIMAL:
+                            length = 0;
+                            precision = 0;
+                            codePage = 0;
+                            if (scale > 28)
+                                scale = 28;
+                            break;
+                        case DataType.DT_WSTR:
+                            precision = 0;
+                            scale = 0;
+                            codePage = 0;
+                            break;
+                        default:
+                            length = 0;
+                            precision = 0;
+                            scale = 0;
+                            codePage = 0;
+                            break;
+                    }
+*/
+                    outputCol.Name = row["ColumnName"].ToString();
+                    outputCol.SetDataTypeProperties(DataType.DT_WSTR, 4000, 0, 0, 0);
+                    MessageBox.Show("Parsing"+ outputCol.Name);
+                //    outputCol.SetDataTypeProperties(dType, length, precision, scale, codePage);
+                }
+
+            } 
+                ///////////////////////////////////////
+
+            //////////////////////////////
+           
+        }
+        public override IDTSCustomProperty100 SetComponentProperty(string propertyName, object propertyValue)
+        {
+            base.SetComponentProperty(propertyName, propertyValue);
+            if (propertyName == "QueueName" &&
+        ComponentMetaData.OutputCollection[0].OutputColumnCollection.Count == 0)
+            {
+                AddOutputColumns(propertyValue.ToString());
+            }
+
+             return base.SetComponentProperty(propertyName, propertyValue);
+            
         }
 
         public override void SetOutputColumnDataTypeProperties(int outputID, int outputColumnID, Microsoft.SqlServer.Dts.Runtime.Wrapper.DataType dataType, int length, int precision, int scale, int codePage)
@@ -173,20 +263,33 @@ namespace TARGITD3FOConnection
         public override void PrimeOutput(int outputs, int[] outputIDs, PipelineBuffer[] buffers)
         {
             PipelineBuffer buffer = buffers[0];
+            sqlConn.Open();
+            DbCommand cmd = sqlConn.CreateCommand();
+
+            //    cmd.CommandText = "SELECT * FROM CountryCodes";
+            cmd.CommandText = ComponentMetaData.CustomPropertyCollection["QueueName"].Value.ToString();
+            cmd.CommandType = System.Data.CommandType.Text;
+            MessageBox.Show("PrimeOutput" + ComponentMetaData.CustomPropertyCollection["QueueName"].Value.ToString());
+            DbDataReader sqlReader1;
+            sqlReader1 = cmd.ExecuteReader();
             try
             {
 
                 string sep = "";
 
-                while (sqlReader.Read())
+                while (sqlReader1.Read())
                 {
 
-                       string s0 = (String.Format("{0}",sqlReader[0]));
-                    string s1 = (String.Format("{0}", sqlReader[1]));
-                    //    MessageBox.Show(s);
-                    buffer.AddRow();
-                    buffer[0] = s0;
-                    buffer[1] = s1;
+                    //            string s0 = (String.Format("{0}",sqlReader[0]));
+                    for (int i = 0; i < sqlReader1.Depth; i++)
+                    {
+                        string s1 = (String.Format("{0}", sqlReader1[i]));
+
+                        //    MessageBox.Show(s);
+                        buffer.AddRow();
+                        buffer[i] = s1;
+                      //  buffer[1] = s1;
+                    }
                 }
             }
             catch (Exception ex)

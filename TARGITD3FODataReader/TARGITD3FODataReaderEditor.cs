@@ -524,8 +524,10 @@ namespace TARGITD3FOConnection
         {
             if (currentManager != null)
             {
+                comboTablesList.Items.Clear();
                 foreach (var v in currentManager.ds.Tables)
                 {
+                    
                     comboTablesList.Items.Add(v);
 
                 }
