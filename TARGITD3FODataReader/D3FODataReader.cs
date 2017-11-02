@@ -12,6 +12,7 @@ using System.IO;
 using System.Data.SqlClient;
 using System.Data.Common;
 using System.Diagnostics;
+using TARGITD3FODataReader.Models;
 
 namespace TARGITD3FOConnection
 {
@@ -26,9 +27,9 @@ namespace TARGITD3FOConnection
         public IDTSRuntimeConnection100 connection;
         public IDTSOutput100 output;
         public DbConnection sqlConn;
-        
+        public int[] mapOutputColsToBufferCols;
         private string queueName;
-
+        int ColumnsCount;
         public TARGITD3FODataReader()
         {
 
@@ -57,9 +58,7 @@ namespace TARGITD3FOConnection
             connection = ComponentMetaData.RuntimeConnectionCollection.New();
             connection.Name = "TARGITD3FOConnection";
             connection.ConnectionManagerID = "TARGITDataSource";
-
-
-            MessageBox.Show("prop");
+       
 
             //CreateColumns();
         }
@@ -119,7 +118,7 @@ namespace TARGITD3FOConnection
                 //    cmd.CommandText = "SELECT * FROM CountryCodes";
                 cmd.CommandText = ComponentMetaData.CustomPropertyCollection["QueueName"].Value.ToString();
                     cmd.CommandType = System.Data.CommandType.Text;
-                MessageBox.Show("PreExecute" + ComponentMetaData.CustomPropertyCollection["QueueName"].Value.ToString());
+               
                
                 sqlReader = cmd.ExecuteReader();
            }
@@ -132,50 +131,35 @@ namespace TARGITD3FOConnection
 
             
             base.PreExecute();
-            
+           
         }
 
         private void AddOutputColumns(String propertyValue)
         {
-            MessageBox.Show("CreateColumns");
-
+           
             output.OutputColumnCollection.RemoveAll();
             output.ExternalMetadataColumnCollection.RemoveAll();
 
-            /*
-                          IDTSOutputColumn100 column1 = output.OutputColumnCollection.New();
-                          IDTSExternalMetadataColumn100 exColumn1 = output.ExternalMetadataColumnCollection.New();
-                          IDTSOutputColumn100 column2 = output.OutputColumnCollection.New();
-                          IDTSExternalMetadataColumn100 exColumn2 = output.ExternalMetadataColumnCollection.New();
-
-                          column1.Name = "Country";
-                          column1.SetDataTypeProperties(DataType.DT_WSTR, 4000, 0, 0, 0);
-                          exColumn1.Name = "Country";
-                          column2.Name = "Code";
-                          column2.SetDataTypeProperties(DataType.DT_WSTR, 4000, 0, 0, 0);
-             exColumn1.Name = "Code"; */
             sqlConn.Open();
             DbCommand cmd = sqlConn.CreateCommand();
 
             //    cmd.CommandText = "SELECT * FROM CountryCodes";
             cmd.CommandText = ComponentMetaData.CustomPropertyCollection["QueueName"].Value.ToString();
             cmd.CommandType = System.Data.CommandType.Text;
-            MessageBox.Show("Execute in Col" + ComponentMetaData.CustomPropertyCollection["QueueName"].Value.ToString());
+           
 
             sqlReader = cmd.ExecuteReader();
-            MessageBox.Show("Executed in Col Done" );
+         
             if (sqlReader != null)
             {
-#if DEBUG
-                Debugger.Launch();
-#endif
 
                 DataTable dt = new DataTable();
                 DataTable dtSchema = sqlReader.GetSchemaTable();
+                this.ColumnsCount = dtSchema.Rows.Count;
                 foreach (DataRow row in dtSchema.Rows)
                 {
                     IDTSOutputColumn100 outputCol = ComponentMetaData.OutputCollection[0].OutputColumnCollection.New();
-                    MessageBox.Show("Parsing");
+                  
                     bool isLong = false;
         /*            DataType dType = DataRecordTypeToBufferType((Type)row["DataType"]);
                     dType = ConvertBufferDataTypeToFitManaged(dType, ref isLong);
@@ -221,7 +205,7 @@ namespace TARGITD3FOConnection
 */
                     outputCol.Name = row["ColumnName"].ToString();
                     outputCol.SetDataTypeProperties(DataType.DT_WSTR, 4000, 0, 0, 0);
-                    MessageBox.Show("Parsing"+ outputCol.Name);
+                    
                 //    outputCol.SetDataTypeProperties(dType, length, precision, scale, codePage);
                 }
 
@@ -262,6 +246,8 @@ namespace TARGITD3FOConnection
 
         public override void PrimeOutput(int outputs, int[] outputIDs, PipelineBuffer[] buffers)
         {
+            base.PrimeOutput(outputs, outputIDs, buffers);
+            IDTSOutput100 output = ComponentMetaData.OutputCollection.FindObjectByID(outputIDs[0]);
             PipelineBuffer buffer = buffers[0];
             sqlConn.Open();
             DbCommand cmd = sqlConn.CreateCommand();
@@ -272,25 +258,32 @@ namespace TARGITD3FOConnection
             MessageBox.Show("PrimeOutput" + ComponentMetaData.CustomPropertyCollection["QueueName"].Value.ToString());
             DbDataReader sqlReader1;
             sqlReader1 = cmd.ExecuteReader();
+#if DEBUG
+            Debugger.Launch();
+#endif
             try
             {
 
                 string sep = "";
+                var dt = new DataTable();
+                DataReaderParser dp = new DataReaderParser(sqlReader1);
+                dt = dp.ConvertDataReaderToTableManually();
 
-                while (sqlReader1.Read())
+                foreach (DataRow row in dt.Rows)
                 {
+                    buffer.AddRow();
 
-                    //            string s0 = (String.Format("{0}",sqlReader[0]));
-                    for (int i = 0; i < sqlReader1.Depth; i++)
+                    for (int x = 0; x < row.ItemArray.Length; x++)
                     {
-                        string s1 = (String.Format("{0}", sqlReader1[i]));
-
-                        //    MessageBox.Show(s);
-                        buffer.AddRow();
-                        buffer[i] = s1;
-                      //  buffer[1] = s1;
+                        if (row.IsNull(x))
+                            buffer.SetNull(mapOutputColsToBufferCols[x]);
+                        else
+                            buffer[x] = (String.Format("{0}", row[x]));
                     }
                 }
+
+                buffer.SetEndOfRowset();
+            
             }
             catch (Exception ex)
             {
