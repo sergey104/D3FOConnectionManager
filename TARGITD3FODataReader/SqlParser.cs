@@ -9,6 +9,7 @@ using Microsoft.SqlServer.TransactSql.ScriptDom;
 
 namespace TARGITD3FOConnection
 {
+    // Class to velatade SQL query
     public class SqlParser
     {
         public List<string> Parse(string sql)

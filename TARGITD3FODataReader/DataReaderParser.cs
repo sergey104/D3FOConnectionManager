@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 namespace TARGITD3FOConnection
 {
+    // Class for transformation DataReader to Data Table
     public class DataReaderParser
     {
         private DbDataReader _dr; // String.Empty;
@@ -43,7 +44,7 @@ namespace TARGITD3FOConnection
                     foreach (DataRow drow in dtSchema.Rows)
                     {
                         string columnName = System.Convert.ToString(drow["ColumnName"]);
-                     //     DataColumn column = new DataColumn(columnName, (Type)(drow["DataType"]));
+                     //     DataColumn column = new DataColumn(columnName, (Type)(drow["DataType"])); !!!
                         DataColumn column = new DataColumn(columnName);
                         column.Unique = false; // (bool)drow["IsUnique"];
                         column.AllowDBNull = true; // (bool)drow["AllowDBNull"];

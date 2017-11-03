@@ -66,7 +66,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dataGridView1);
             this.Name = "TableContent";
-            this.Text = "TableContent";
+            this.Text = "View content for selected table or query";
             ((System.ComponentModel.ISupportInitialize)(this.d3FOConnectionManagerEditorBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
