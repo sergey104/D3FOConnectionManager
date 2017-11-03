@@ -152,8 +152,9 @@ namespace TARGITD3FOConnection
         {
             // Set the connectionstring
             UpdateConnectionString();
-            Assembly asm = Assembly.LoadFrom(@"D:\Weather\TARGIT.WeatherService\TARGIT.WeatherService.dll");
-           // Assembly asm = Assembly.LoadFrom(@"D:\Weather\TARGIT.WeatherService\TARGIT.WeatherService.dll");
+            //   Assembly asm = Assembly.LoadFrom(@"D:\Weather\TARGIT.WeatherService\TARGIT.WeatherService.dll");
+            Assembly asm = Assembly.LoadFrom(@"D:\ADONET\TARGIT.AX7.dll");
+            // Assembly asm = Assembly.LoadFrom(@"D:\Weather\TARGIT.WeatherService\TARGIT.WeatherService.dll");
             var FuncConnection = asm.DefinedTypes.First(c => c.Name == "WeatherConnection");
 
             string errorstr = "";

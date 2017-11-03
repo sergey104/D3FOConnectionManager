@@ -245,7 +245,7 @@ namespace TARGITD3FOConnection
             //    cmd.CommandText = "SELECT * FROM CountryCodes";
             cmd.CommandText = ComponentMetaData.CustomPropertyCollection["QueueName"].Value.ToString();
             cmd.CommandType = System.Data.CommandType.Text;
-            MessageBox.Show("PrimeOutput" + ComponentMetaData.CustomPropertyCollection["QueueName"].Value.ToString());
+          //  MessageBox.Show("PrimeOutput" + ComponentMetaData.CustomPropertyCollection["QueueName"].Value.ToString());
             DbDataReader sqlReader1;
             sqlReader1 = cmd.ExecuteReader();
 
