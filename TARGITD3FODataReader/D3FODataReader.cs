@@ -30,6 +30,7 @@ namespace TARGITD3FOConnection
         public int[] mapOutputColsToBufferCols;
         private string queueName;
         int ColumnsCount;
+
         public TARGITD3FODataReader()
         {
 
@@ -48,7 +49,7 @@ namespace TARGITD3FOConnection
 
             output = ComponentMetaData.OutputCollection.New();
             output.Name = "DataOutput";
-
+            //define custom parameter for query
             IDTSCustomProperty100 queueName = ComponentMetaData.CustomPropertyCollection.New();
             queueName.Name = "QueueName";
             queueName.Description = "The name of the queue to read messages from";
@@ -59,24 +60,19 @@ namespace TARGITD3FOConnection
             connection.Name = "TARGITD3FOConnection";
             connection.ConnectionManagerID = "TARGITDataSource";
        
-
-            //CreateColumns();
         }
         public override void AcquireConnections(object transaction)
         {
             if (ComponentMetaData.RuntimeConnectionCollection[0].ConnectionManager != null)
             {
                 ConnectionManager connectionManager = Microsoft.SqlServer.Dts.Runtime.DtsConvert.GetWrapper(
-                  ComponentMetaData.RuntimeConnectionCollection[0].ConnectionManager);
-                
+                ComponentMetaData.RuntimeConnectionCollection[0].ConnectionManager);
                 this.cm = connectionManager.InnerObject as D3FOConnectionManager;
                
                 if (this.cm == null)
                     throw new Exception("Couldn't get the cm connection manager, ");
                 
                 this.queueName = ComponentMetaData.CustomPropertyCollection["QueueName"].Value.ToString();
-                
-               
                 connection = this.cm.AcquireConnection(transaction) as IDTSRuntimeConnection100;
                 
             }
@@ -86,10 +82,10 @@ namespace TARGITD3FOConnection
         public override void ReleaseConnections()
         {
           //  if (connection.ConnectionManager != null)
-         //   {
+          //   {
                 //this.connection.ConnectionManager.ReleaseConnection(connection);
                 base.ReleaseConnections();
-         //   }
+          //   }
         }
         // [CLSCompliant(false)]
         public override DTSValidationStatus Validate()
@@ -111,25 +107,22 @@ namespace TARGITD3FOConnection
         {
             
             try
-                {
+               {
                 sqlConn.Open();
                 DbCommand cmd = sqlConn.CreateCommand();
 
-                //    cmd.CommandText = "SELECT * FROM CountryCodes";
                 cmd.CommandText = ComponentMetaData.CustomPropertyCollection["QueueName"].Value.ToString();
-                    cmd.CommandType = System.Data.CommandType.Text;
-               
-               
+                cmd.CommandType = System.Data.CommandType.Text;
+                          
                 sqlReader = cmd.ExecuteReader();
-           }
-               catch (Exception)
+                }
+               catch (Exception e)
                 {
-                    ReleaseConnections();
-                    throw;
+                MessageBox.Show(e.ToString());
+                ReleaseConnections();
+                throw;
                 } 
-            
-
-            
+                        
             base.PreExecute();
            
         }
@@ -210,10 +203,7 @@ namespace TARGITD3FOConnection
                 }
 
             } 
-                ///////////////////////////////////////
-
-            //////////////////////////////
-           
+                   
         }
         public override IDTSCustomProperty100 SetComponentProperty(string propertyName, object propertyValue)
         {
@@ -258,9 +248,7 @@ namespace TARGITD3FOConnection
             MessageBox.Show("PrimeOutput" + ComponentMetaData.CustomPropertyCollection["QueueName"].Value.ToString());
             DbDataReader sqlReader1;
             sqlReader1 = cmd.ExecuteReader();
-#if DEBUG
-            Debugger.Launch();
-#endif
+
             try
             {
 

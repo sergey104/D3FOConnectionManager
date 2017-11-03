@@ -56,6 +56,8 @@ namespace TARGITD3FOConnection
         public IDTSOutput100 output;
         public DbConnection sqlConn;
         private ConnectionManagerItem currentManager = new ConnectionManagerItem();
+        private Label label6;
+
         public string SQLString { get; set; }
 
         private class ConnectionManagerItem
@@ -115,6 +117,7 @@ namespace TARGITD3FOConnection
             this.tabColumnsPage = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label6 = new System.Windows.Forms.Label();
             this.tabErrorOutputPage = new System.Windows.Forms.TabPage();
             this.panel3 = new System.Windows.Forms.Panel();
             this.buttonOK = new System.Windows.Forms.Button();
@@ -126,6 +129,7 @@ namespace TARGITD3FOConnection
             this.tabTables.SuspendLayout();
             this.tabSQL.SuspendLayout();
             this.tabColumnsPage.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.tabErrorOutputPage.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -369,10 +373,21 @@ namespace TARGITD3FOConnection
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label6);
             this.panel1.Location = new System.Drawing.Point(7, 19);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(627, 294);
             this.panel1.TabIndex = 0;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(134, 105);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(97, 13);
+            this.label6.TabIndex = 0;
+            this.label6.Text = "Under construction";
+            this.label6.Click += new System.EventHandler(this.label6_Click);
             // 
             // tabErrorOutputPage
             // 
@@ -441,6 +456,8 @@ namespace TARGITD3FOConnection
             this.tabSQL.ResumeLayout(false);
             this.tabSQL.PerformLayout();
             this.tabColumnsPage.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.tabErrorOutputPage.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -799,6 +816,11 @@ namespace TARGITD3FOConnection
         {
             string s = this.comboTablesList.SelectedItem.ToString();
             this.SQLString = richTextBox1.Text.ToString();
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
         }
 
         ///////////////
