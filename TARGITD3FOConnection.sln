@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TARGITD3FOConnectionManager
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TARGITD3FODataReader", "TARGITD3FODataReader\TARGITD3FODataReader.csproj", "{7433374F-DA8F-40F9-91A6-0CC3B7DE9A89}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TARGITD3FO_Tests", "TARGITD3FO_Tests\TARGITD3FO_Tests.csproj", "{23BAA143-769E-4E47-A945-30BC53E620A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{7433374F-DA8F-40F9-91A6-0CC3B7DE9A89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7433374F-DA8F-40F9-91A6-0CC3B7DE9A89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7433374F-DA8F-40F9-91A6-0CC3B7DE9A89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23BAA143-769E-4E47-A945-30BC53E620A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23BAA143-769E-4E47-A945-30BC53E620A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23BAA143-769E-4E47-A945-30BC53E620A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23BAA143-769E-4E47-A945-30BC53E620A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
