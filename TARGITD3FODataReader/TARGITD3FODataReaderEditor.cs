@@ -25,7 +25,7 @@ namespace TARGITD3FOConnection
         private TabPage tabColumnsPage;
         private ComboBox comboMode;
         private Label label3;
-        private TabControl tabAccessMode;
+        private MyTabControl tabAccessMode;
         private TabPage tabTables;
         private Label label4;
         private TabPage tabSQL;
@@ -35,7 +35,6 @@ namespace TARGITD3FOConnection
         private Label label5;
         private Button button5;
         private Button button4;
-        private Button button2;
         private Panel panel2;
         private Panel panel1;
         private Panel panel3;
@@ -98,14 +97,13 @@ namespace TARGITD3FOConnection
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabConnectionManagerPage = new System.Windows.Forms.TabPage();
             this.buttonPreview = new System.Windows.Forms.Button();
-            this.tabAccessMode = new System.Windows.Forms.TabControl();
+            this.tabAccessMode = new MyTabControl(); 
             this.tabTables = new System.Windows.Forms.TabPage();
             this.comboTablesList = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.tabSQL = new System.Windows.Forms.TabPage();
             this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.comboMode = new System.Windows.Forms.ComboBox();
@@ -233,7 +231,6 @@ namespace TARGITD3FOConnection
             this.tabSQL.BackColor = System.Drawing.Color.WhiteSmoke;
             this.tabSQL.Controls.Add(this.button5);
             this.tabSQL.Controls.Add(this.button4);
-            this.tabSQL.Controls.Add(this.button2);
             this.tabSQL.Controls.Add(this.richTextBox1);
             this.tabSQL.Controls.Add(this.label5);
             this.tabSQL.Location = new System.Drawing.Point(4, 22);
@@ -245,7 +242,7 @@ namespace TARGITD3FOConnection
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(483, 112);
+            this.button5.Location = new System.Drawing.Point(483, 76);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(104, 23);
             this.button5.TabIndex = 5;
@@ -255,22 +252,13 @@ namespace TARGITD3FOConnection
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(483, 72);
+            this.button4.Location = new System.Drawing.Point(483, 33);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(104, 23);
             this.button4.TabIndex = 4;
             this.button4.Text = "Browse...";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(483, 33);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(104, 23);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Parameters";
-            this.button2.UseVisualStyleBackColor = true;
             // 
             // richTextBox1
             // 
@@ -538,8 +526,7 @@ namespace TARGITD3FOConnection
                 comboTablesList.SelectedIndex = 0;
                 comboMode.SelectedIndex = 0;
             }
-
-           
+            
         }
         private void UpdateConnectionTab()
         {
@@ -826,8 +813,18 @@ namespace TARGITD3FOConnection
         ///////////////
 
     }
-
-
+    class MyTabControl : TabControl
+    {
+        protected override void WndProc(ref Message m)
+        {
+            // Hide tabs by trapping the TCM_ADJUSTRECT message
+            if (m.Msg == 0x1328 && !DesignMode)
+                m.Result = (IntPtr)1;
+            else
+                base.WndProc(ref m);
+        }
     }
+
+}
 
 
