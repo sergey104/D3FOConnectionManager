@@ -97,7 +97,7 @@ namespace TARGITD3FOConnection
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabConnectionManagerPage = new System.Windows.Forms.TabPage();
             this.buttonPreview = new System.Windows.Forms.Button();
-            this.tabAccessMode = new MyTabControl(); 
+            this.tabAccessMode = new TARGITD3FOConnection.MyTabControl();
             this.tabTables = new System.Windows.Forms.TabPage();
             this.comboTablesList = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -211,7 +211,7 @@ namespace TARGITD3FOConnection
             // comboTablesList
             // 
             this.comboTablesList.FormattingEnabled = true;
-            this.comboTablesList.Location = new System.Drawing.Point(41, 37);
+            this.comboTablesList.Location = new System.Drawing.Point(41, 51);
             this.comboTablesList.Name = "comboTablesList";
             this.comboTablesList.Size = new System.Drawing.Size(403, 21);
             this.comboTablesList.TabIndex = 1;
@@ -220,9 +220,10 @@ namespace TARGITD3FOConnection
             // label4
             // 
             this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(38, 20);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(137, 13);
+            this.label4.Size = new System.Drawing.Size(169, 16);
             this.label4.TabIndex = 0;
             this.label4.Text = "Name of the table or a view";
             // 
@@ -273,9 +274,10 @@ namespace TARGITD3FOConnection
             // label5
             // 
             this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.Location = new System.Drawing.Point(7, 7);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(97, 13);
+            this.label5.Size = new System.Drawing.Size(120, 16);
             this.label5.TabIndex = 0;
             this.label5.Text = "SQL command text";
             // 

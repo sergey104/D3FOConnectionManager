@@ -109,21 +109,23 @@ namespace TARGITD3FOConnection
             // Save value from fields in connectionManager object
             private void btnOK_Click(object sender, EventArgs e)
             {
-            this._connectionManager.Name = this.txtName.Text;
-            this._connectionManager.Properties["ManagerName"].SetValue(this._connectionManager, this.txtName.Text);
-            this._connectionManager.Properties["Assemblyp"].SetValue(this._connectionManager, this.txtAssembly.Text);
-            this._connectionManager.Properties["Connection_Method"].SetValue(this._connectionManager, this.txtConnectionMethod.Text);
-            this._connectionManager.Properties["Company"].SetValue(this._connectionManager, this.txtCompany.Text);
-            this._connectionManager.Properties["AOS_Uri"].SetValue(this._connectionManager, this.txtAOS_Uri.Text);
-            this._connectionManager.Properties["AD_Resource"].SetValue(this._connectionManager, this.txtAD_Resource.Text);
-            this._connectionManager.Properties["AD_Tenant"].SetValue(this._connectionManager, this.txtAD_Tenant.Text);
-            this._connectionManager.Properties["AD_Client_App_ID"].SetValue(this._connectionManager, this.txtAD_Client_App_ID.Text);
-            this._connectionManager.Properties["AD_Client_App_Secret"].SetValue(this._connectionManager, this.txtAD_Client_App_Secret.Text);
-            if(this.radioServer.Checked == true) this._connectionManager.Properties["Assembly_location"].SetValue(this._connectionManager, "Server");
-            else this._connectionManager.Properties["Assembly_location"].SetValue(this._connectionManager, "Local");
-            this.DialogResult = DialogResult.OK;
-            this.Close();
-
+            if (this.Validate_Check())
+            {
+                this._connectionManager.Name = this.txtName.Text;
+                this._connectionManager.Properties["ManagerName"].SetValue(this._connectionManager, this.txtName.Text);
+                this._connectionManager.Properties["Assemblyp"].SetValue(this._connectionManager, this.txtAssembly.Text);
+                this._connectionManager.Properties["Connection_Method"].SetValue(this._connectionManager, this.txtConnectionMethod.Text);
+                this._connectionManager.Properties["Company"].SetValue(this._connectionManager, this.txtCompany.Text);
+                this._connectionManager.Properties["AOS_Uri"].SetValue(this._connectionManager, this.txtAOS_Uri.Text);
+                this._connectionManager.Properties["AD_Resource"].SetValue(this._connectionManager, this.txtAD_Resource.Text);
+                this._connectionManager.Properties["AD_Tenant"].SetValue(this._connectionManager, this.txtAD_Tenant.Text);
+                this._connectionManager.Properties["AD_Client_App_ID"].SetValue(this._connectionManager, this.txtAD_Client_App_ID.Text);
+                this._connectionManager.Properties["AD_Client_App_Secret"].SetValue(this._connectionManager, this.txtAD_Client_App_Secret.Text);
+                if (this.radioServer.Checked == true) this._connectionManager.Properties["Assembly_location"].SetValue(this._connectionManager, "Server");
+                else this._connectionManager.Properties["Assembly_location"].SetValue(this._connectionManager, "Local");
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
         }
 
             // Cancel diolog
@@ -435,22 +437,24 @@ namespace TARGITD3FOConnection
 
         private void btnTest_Click(object sender, EventArgs e)
         {
-            string z = this.ConnectionManager.ConnectionString;
-            object t = this.ConnectionManager.AcquireConnection(sender);
-            try
+            if (this.Validate_Check())
             {
-                ((IDbConnection)t).Open(); ;
-                MessageBox.Show("All OK!  " + z);
-               
-            }
-            catch(Exception er)
-            {
-                MessageBox.Show("Cannot connect" +"  "+ er.ToString());
-                return;
-            }
+                string z = this.ConnectionManager.ConnectionString;
+                object t = this.ConnectionManager.AcquireConnection(sender);
+                try
+                {
+                    ((IDbConnection)t).Open(); ;
+                    MessageBox.Show("All OK!  " + z);
+
+                }
+                catch (Exception er)
+                {
+                    MessageBox.Show("Cannot connect" + "  " + er.ToString());
+                    return;
+                }
 
              ((IDbConnection)t).Close();
-
+            }
         }
    
 
@@ -458,7 +462,58 @@ namespace TARGITD3FOConnection
         {
 
         }
+        private bool Validate_Check()
+        {
+            if( string.IsNullOrEmpty(this.txtCompany.Text))
+            {
+                MessageBox.Show("Company string is mandatory");
+                this.txtCompany.Focus();
+                return false;
+            }
 
-        
+            if (string.IsNullOrEmpty(this.txtName.Text))
+            {
+                MessageBox.Show("Name field is mandatory");
+                this.txtName.Focus();
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(this.txtAOS_Uri.Text))
+            {
+                MessageBox.Show("AOS_Uri field is mandatory");
+                this.txtAOS_Uri.Focus();
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(this.txtAD_Tenant.Text))
+            {
+                MessageBox.Show("AD_Tenant field is mandatory");
+                this.txtAD_Tenant.Focus();
+                return false;
+            }
+            if (string.IsNullOrEmpty(this.txtAD_Resource.Text))
+            {
+                MessageBox.Show("AD_Resource field is mandatory");
+                this.txtAD_Resource.Focus();
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(this.txtAD_Client_App_ID.Text))
+            {
+                MessageBox.Show("AD_Client_App_ID field is mandatory");
+                this.txtAD_Client_App_ID.Focus();
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(this.txtAD_Client_App_Secret.Text))
+            {
+                MessageBox.Show("txtAD_Client_App_Secret field is mandatory");
+                this.txtAD_Client_App_Secret.Focus();
+                return false;
+            }
+                return true;
+        }
+
+       
     }
     }

@@ -194,51 +194,54 @@ namespace TARGITD3FOConnection
                 infoEvents.FireError(0, "TARGITD3FO Connection Manager", "Connection Manager Name Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
-            
-    
+            else
+
             if (string.IsNullOrEmpty(Assemblyp))
             {
                 infoEvents.FireError(0, "TARGITD3FO Connection Manager", "Assemblyp Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
-            
+            else
             if (string.IsNullOrEmpty(Company))
             {
-                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "Сщьзфтн Field is mandatory.", string.Empty, 0);
+                infoEvents.FireError(0, "TARGITD3FO Connection Manager", "Company Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
-            
+            else
             if (string.IsNullOrEmpty(AOS_Uri))
             {
                 infoEvents.FireError(0, "TARGITD3FO Connection Manager", "AOS_Uri Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
-            
+            else
             if (string.IsNullOrEmpty(AD_Resource))
             {
                 infoEvents.FireError(0, "TARGITD3FO Connection Manager", "AD_Resource Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
-            
+            else
             if (string.IsNullOrEmpty(AD_Tenant))
             {
                 infoEvents.FireError(0, "TARGITD3FO Connection Manager", "AD_Tenant Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
-            
+            else
             if (string.IsNullOrEmpty(AD_Client_App_ID))
             {
                 infoEvents.FireError(0, "TARGITD3FO Connection Manager", "AD_Client_App_ID Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
-            
+            else
             if (string.IsNullOrEmpty(AD_Client_App_Secret))
             {
                 infoEvents.FireError(0, "TARGITD3FO Connection Manager", "AD_Client_App_Secret Field is mandatory.", string.Empty, 0);
                 return DTSExecResult.Failure;
             }
-            
+            else
+            {
+                base.Validate(infoEvents);
                 return DTSExecResult.Success;
+            }
             
         }
         #endregion
