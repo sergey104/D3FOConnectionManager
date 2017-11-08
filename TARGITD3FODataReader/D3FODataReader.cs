@@ -154,7 +154,7 @@ namespace TARGITD3FOConnection
                     IDTSOutputColumn100 outputCol = ComponentMetaData.OutputCollection[0].OutputColumnCollection.New();
                   
                     bool isLong = false;
-        /*            DataType dType = DataRecordTypeToBufferType((Type)row["DataType"]);
+                    DataType dType = DataRecordTypeToBufferType((Type)row["DataType"]);
                     dType = ConvertBufferDataTypeToFitManaged(dType, ref isLong);
                     int length = ((int)row["ColumnSize"]) == -1 ? 1000 : (int)row["ColumnSize"];
                     int precision = row["NumericPrecision"] is System.DBNull ? 0 : (short)row["NumericPrecision"];
@@ -195,11 +195,11 @@ namespace TARGITD3FOConnection
                             codePage = 0;
                             break;
                     }
-*/
+
                     outputCol.Name = row["ColumnName"].ToString();
-                    outputCol.SetDataTypeProperties(DataType.DT_WSTR, 4000, 0, 0, 0);
+            //        outputCol.SetDataTypeProperties(DataType.DT_WSTR, 4000, 0, 0, 0);
                     
-                //    outputCol.SetDataTypeProperties(dType, length, precision, scale, codePage);
+                   outputCol.SetDataTypeProperties(dType, length, precision, scale, codePage);
                 }
 
             } 
