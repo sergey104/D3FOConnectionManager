@@ -152,15 +152,17 @@ namespace TARGITD3FOConnection
                 foreach (DataRow row in dtSchema.Rows)
                 {
                     IDTSOutputColumn100 outputCol = ComponentMetaData.OutputCollection[0].OutputColumnCollection.New();
-                  
+                   
+                   // MessageBox.Show("1111111111111111111111");
                     bool isLong = false;
-                    DataType dType = DataRecordTypeToBufferType((Type)row["DataType"]);
+                    DataType dType = DataType.DT_WSTR;
+                     dType = DataRecordTypeToBufferType(row["DataType"].GetType());
                     dType = ConvertBufferDataTypeToFitManaged(dType, ref isLong);
-                    int length = ((int)row["ColumnSize"]) == -1 ? 1000 : (int)row["ColumnSize"];
-                    int precision = row["NumericPrecision"] is System.DBNull ? 0 : (short)row["NumericPrecision"];
-                    int scale = row["NumericScale"] is System.DBNull ? 0 : (short)row["NumericScale"];
-                    int codePage = dtSchema.Locale.TextInfo.ANSICodePage;
-
+                    int length = 0;// ((int)row["ColumnSize"]) == -1 ? 1000 : (int)row["ColumnSize"];
+                    int precision = 0; //row["NumericPrecision"] is System.DBNull ? 0 : (short)row["NumericPrecision"];
+                    int scale = 0; // row["NumericScale"] is System.DBNull ? 0 : (short)row["NumericScale"];
+                    int codePage = 0; // dtSchema.Locale.TextInfo.ANSICodePage;
+                    
                     switch (dType)
                     {
                         case DataType.DT_STR:
@@ -189,17 +191,18 @@ namespace TARGITD3FOConnection
                             codePage = 0;
                             break;
                         default:
-                            length = 0;
+                            
                             precision = 0;
                             scale = 0;
-                            codePage = 0;
+                            
+                            
                             break;
                     }
+                 //   MessageBox.Show("2222222222222222222222222222"); 
+                   //   outputCol.Name = row["ColumnName"].ToString();
+                  //   outputCol.SetDataTypeProperties(DataType.DT_WSTR, 4000, 0, 0, 0);
 
-                    outputCol.Name = row["ColumnName"].ToString();
-            //        outputCol.SetDataTypeProperties(DataType.DT_WSTR, 4000, 0, 0, 0);
-                    
-                   outputCol.SetDataTypeProperties(dType, length, precision, scale, codePage);
+                    outputCol.SetDataTypeProperties(dType, length, precision, scale, codePage);
                 }
 
             } 

@@ -5,7 +5,22 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Data;
 using System.Windows.Forms;
-
+using System.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Microsoft.SqlServer.Dts.Pipeline;
+using Microsoft.SqlServer.Dts.Pipeline.Wrapper;
+using Microsoft.SqlServer.Dts.Runtime;
+using Microsoft.SqlServer.Dts.Runtime.Wrapper;
+using System.Data;
+using System.Windows.Forms;
+using System.IO;
+using System.Data.SqlClient;
+using System.Data.Common;
+using System.Diagnostics;
+using TARGITD3FODataReader.Models;
 namespace TARGITD3FOConnection
 {
     // Class for transformation DataReader to Data Table
@@ -44,8 +59,10 @@ namespace TARGITD3FOConnection
                     foreach (DataRow drow in dtSchema.Rows)
                     {
                         string columnName = System.Convert.ToString(drow["ColumnName"]);
-                        DataColumn column = new DataColumn(columnName, (drow["DataType"]).GetType()); 
-                //        DataColumn column = new DataColumn(columnName);
+                        //       Type dtype = (drow["DataType"].GetType());
+
+                              DataColumn column = new DataColumn(columnName, (drow["DataType"].GetType())); 
+                     //   DataColumn column = new DataColumn(columnName);
                         column.Unique = false; // (bool)drow["IsUnique"];
                         column.AllowDBNull = true; // (bool)drow["AllowDBNull"];
                         column.AutoIncrement = false; // (bool)drow["IsAutoIncrement"];
