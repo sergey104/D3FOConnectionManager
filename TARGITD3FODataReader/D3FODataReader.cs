@@ -169,6 +169,7 @@ namespace TARGITD3FOConnection
                         case DataType.DT_TEXT:
                             precision = 0;
                             scale = 0;
+                            length = 256;
                             break;
                         case DataType.DT_NUMERIC:
                             length = 0;
@@ -189,7 +190,7 @@ namespace TARGITD3FOConnection
                             precision = 0;
                             scale = 0;
                             codePage = 0;
-                            break;
+                            length = 256;                         break;
                         default:
                             
                             precision = 0;
@@ -199,7 +200,7 @@ namespace TARGITD3FOConnection
                             break;
                     }
                  //   MessageBox.Show("2222222222222222222222222222"); 
-                   //   outputCol.Name = row["ColumnName"].ToString();
+                      outputCol.Name = row["ColumnName"].ToString();
                   //   outputCol.SetDataTypeProperties(DataType.DT_WSTR, 4000, 0, 0, 0);
 
                     outputCol.SetDataTypeProperties(dType, length, precision, scale, codePage);
@@ -251,7 +252,9 @@ namespace TARGITD3FOConnection
           //  MessageBox.Show("PrimeOutput" + ComponentMetaData.CustomPropertyCollection["QueueName"].Value.ToString());
             DbDataReader sqlReader1;
             sqlReader1 = cmd.ExecuteReader();
-
+#if DEBUG
+            Debugger.Launch();
+#endif
             try
             {
 
@@ -278,7 +281,7 @@ namespace TARGITD3FOConnection
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occurred:\n{ex.Message}\n{ex.StackTrace}");
+                MessageBox.Show("An error occurred:\n" +ex.Message+"\n"+ex.StackTrace);
             }
             buffer.SetEndOfRowset();
         }
