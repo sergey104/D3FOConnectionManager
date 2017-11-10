@@ -5,22 +5,9 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Data;
 using System.Windows.Forms;
-using System.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.SqlServer.Dts.Pipeline;
-using Microsoft.SqlServer.Dts.Pipeline.Wrapper;
-using Microsoft.SqlServer.Dts.Runtime;
-using Microsoft.SqlServer.Dts.Runtime.Wrapper;
-using System.Data;
-using System.Windows.Forms;
-using System.IO;
-using System.Data.SqlClient;
-using System.Data.Common;
-using System.Diagnostics;
+
 using TARGITD3FODataReader.Models;
+
 namespace TARGITD3FOConnection
 {
     // Class for transformation DataReader to Data Table

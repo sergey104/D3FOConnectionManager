@@ -252,9 +252,9 @@ namespace TARGITD3FOConnection
           //  MessageBox.Show("PrimeOutput" + ComponentMetaData.CustomPropertyCollection["QueueName"].Value.ToString());
             DbDataReader sqlReader1;
             sqlReader1 = cmd.ExecuteReader();
-#if DEBUG
-            Debugger.Launch();
-#endif
+//#if DEBUG
+            //Debugger.Launch();
+//#endif
             try
             {
 
